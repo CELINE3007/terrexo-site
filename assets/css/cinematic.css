@@ -1,0 +1,116 @@
+/* ============================================================
+   Terrexo — Moteur cinématique
+   « Film » scroll-scrubbé : une scène épinglée où le scroll
+   pilote, image par image, la transformation de la maison.
+   Les vidéos Kling sont enchaînées par fondus ; les images
+   fixes reçoivent un léger mouvement de caméra (Ken Burns).
+   ============================================================ */
+:root{
+  --gold-soft:#c6a86a;
+  --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  --c1:217,70,200;   /* néon magenta (piloté au scroll) */
+  --c2:60,120,255;   /* néon bleu    (piloté au scroll) */
+  --p1x:28%; --p1y:32%;
+  --p2x:74%; --p2y:64%;
+}
+
+.cine{position:relative;z-index:1;background:#05060a;color:#fff;}
+
+/* ===================== FILM ===================== */
+/* .film = section HAUTE (sa hauteur = course de scroll, posée en JS) */
+.film{position:relative;background:#05060a;}
+/* .film-pin = scène épinglée plein écran */
+.film-pin{position:sticky;top:0;height:100svh;min-height:560px;overflow:hidden;background:#05060a;}
+
+/* --- Fond néon (signature de l'intro, visible derrière la maison détourée) --- */
+.film-bg{position:absolute;inset:0;z-index:0;background:#05060a;}
+.film-bg::before{content:"";position:absolute;inset:-15%;
+  background:
+    radial-gradient(34% 34% at var(--p1x) var(--p1y), rgba(var(--c1),.40) 0%, rgba(var(--c1),.10) 34%, transparent 58%),
+    radial-gradient(36% 36% at var(--p2x) var(--p2y), rgba(var(--c2),.36) 0%, rgba(var(--c2),.09) 36%, transparent 60%);
+  filter:blur(55px);transition:background .15s linear;}
+.film-bg::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(120% 100% at 50% 42%, transparent 46%, rgba(0,0,0,.62) 100%),
+    linear-gradient(180deg, rgba(5,6,10,.30) 0%, rgba(5,6,10,0) 30%, rgba(5,6,10,.55) 100%);}
+.film-grid{position:absolute;inset:0;pointer-events:none;opacity:.55;
+  background:
+    linear-gradient(rgba(150,170,220,.05) 1px, transparent 1px) 0 0/66px 66px,
+    linear-gradient(90deg, rgba(150,170,220,.05) 1px, transparent 1px) 0 0/66px 66px;
+  -webkit-mask-image:radial-gradient(120% 90% at 50% 45%, #000 30%, transparent 78%);
+          mask-image:radial-gradient(120% 90% at 50% 45%, #000 30%, transparent 78%);
+  animation:gridDrift 26s linear infinite;}
+@keyframes gridDrift{0%{background-position:0 0,0 0;}100%{background-position:0 66px,66px 0;}}
+
+/* --- Couches média empilées (opacité pilotée au scroll => fondus) --- */
+.film-layer{position:absolute;inset:0;z-index:2;opacity:0;will-change:opacity;
+  backface-visibility:hidden;}
+.film-layer video,
+.film-layer .ly-img{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;will-change:transform;}
+.ly-img{background-size:cover;background-position:center;}
+
+/* Couche intro : maison détourée centrée + socle néon */
+.film-layer.is-hero{display:flex;align-items:center;justify-content:center;opacity:1;}
+.film-layer.is-hero .ly-platform{position:absolute;left:50%;top:73%;transform:translateX(-50%);
+  width:52vw;height:18vh;border-radius:50%;
+  background:radial-gradient(closest-side, rgba(var(--c2),.45), rgba(var(--c1),.14) 55%, transparent 76%);
+  filter:blur(26px);}
+.film-layer.is-hero .ly-house{position:relative;width:auto;height:auto;max-width:60vw;max-height:60vh;
+  object-fit:contain;filter:drop-shadow(0 30px 55px rgba(0,0,0,.7));will-change:transform;}
+
+/* Voile pour la lisibilité du texte */
+.film-veil{position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:linear-gradient(180deg, rgba(5,6,10,.42) 0%, rgba(5,6,10,0) 26%, rgba(5,6,10,0) 50%, rgba(5,6,10,.82) 100%);}
+
+/* --- Légendes (une par segment, fondu au scroll) --- */
+.film-caps{position:absolute;inset:0;z-index:4;pointer-events:none;}
+.film-cap{position:absolute;left:clamp(24px,5vw,76px);bottom:clamp(64px,12vh,120px);
+  max-width:min(820px,84vw);opacity:0;will-change:opacity,transform;}
+.film-cap .scene-cta{pointer-events:auto;margin-top:28px;display:inline-flex;}
+
+.cap-k{display:block;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.22em;
+  font-size:.7rem;color:var(--gold-soft);margin-bottom:14px;opacity:.92;}
+.cap-t{font-size:clamp(2rem,5.4vw,4.4rem);line-height:1.03;letter-spacing:-.025em;font-weight:600;
+  text-shadow:0 2px 40px rgba(0,0,0,.6);margin:0;}
+.cap-t em{color:var(--gold-soft);font-weight:500;font-style:normal;}
+
+/* --- Indice de scroll --- */
+.film-hint{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);z-index:6;
+  font-family:var(--font-mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.55);display:flex;align-items:center;gap:8px;transition:opacity .4s ease;}
+.film-hint b{font-size:1.1rem;animation:hintBob 1.8s ease-in-out infinite;}
+@keyframes hintBob{0%,100%{transform:translateY(0);}50%{transform:translateY(4px);}}
+
+/* --- Barre de progression du film (fine, en haut) --- */
+.film-bar{position:fixed;left:0;top:0;height:3px;width:0;z-index:60;
+  background:linear-gradient(90deg, rgba(var(--c1),.9), var(--gold-soft));
+  box-shadow:0 0 12px rgba(var(--c2),.6);transition:width .08s linear;}
+
+/* --- Pastilles latérales --- */
+.cine-prog{position:fixed;top:50%;right:18px;transform:translateY(-50%);z-index:60;
+  display:flex;flex-direction:column;gap:10px;}
+.cine-prog button{width:8px;height:8px;border-radius:50%;border:0;padding:0;cursor:pointer;
+  background:rgba(255,255,255,.28);transition:background .3s,transform .3s;}
+.cine-prog button.on{background:var(--gold-soft);transform:scale(1.35);}
+
+@media (max-width:760px){
+  .film-layer.is-hero .ly-house{max-width:86vw;max-height:46vh;}
+  .film-layer.is-hero .ly-platform{width:78vw;}
+  .cine-prog{display:none;}
+}
+
+/* ===================== REPLIS (a11y / no-js) =====================
+   Le JS bascule en mode empilé pour prefers-reduced-motion.
+   En l'absence de JS, on dépile aussi proprement.            */
+.is-static .film-pin{position:static;height:auto;}
+.is-static .film-layer{position:relative;height:100svh;opacity:1!important;visibility:visible!important;}
+.is-static .film-veil{display:none;}
+.is-static .film-bar,.is-static .film-hint{display:none;}
+
+html:not(.js) .film{height:auto!important;}
+html:not(.js) .film-pin{position:static;height:auto;}
+html:not(.js) .film-layer{position:relative;height:100svh;opacity:1;}
+html:not(.js) .film-bg{position:absolute;}
+html:not(.js) .film-veil{display:none;}
+html:not(.js) .film-cap{opacity:1;}

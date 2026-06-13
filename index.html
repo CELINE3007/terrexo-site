@@ -15,7 +15,7 @@
 <meta property="og:title" content="Révélez le potentiel de votre maison — Terrexo">
 <meta property="og:description" content="Extensions, combles, lucarnes et rénovations haut de gamme au Luxembourg. Une métamorphose pensée pour durer.">
 <meta property="og:url" content="https://www.terrexo.lu/">
-<meta property="og:image" content="https://www.terrexo.lu/assets/img/f10.webp">
+<meta property="og:image" content="https://www.terrexo.lu/assets/img/scenes/09_final.webp">
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
@@ -24,10 +24,10 @@
 <link rel="manifest" href="site.webmanifest">
 
 <link rel="preload" href="assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/img/f01.webp" as="image">
+<link rel="preload" href="assets/img/house.png" as="image">
 <link rel="stylesheet" href="assets/css/fonts.css">
 <link rel="stylesheet" href="assets/css/story.css">
-<link rel="stylesheet" href="assets/css/film.css">
+<link rel="stylesheet" href="assets/css/cinematic.css">
 
 <script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');</script>
 
@@ -51,6 +51,20 @@
   "priceRange": "€€€"
 }
 </script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Faut-il une autorisation pour une extension ou des combles ?", "acceptedAnswer": { "@type": "Answer", "text": "Dans la plupart des communes luxembourgeoises, oui. Terrexo réalise l'étude de faisabilité et vous accompagne dans les démarches d'autorisation de bâtir." } },
+    { "@type": "Question", "name": "Combien de temps dure un chantier ?", "acceptedAnswer": { "@type": "Answer", "text": "Selon l'ampleur : quelques semaines pour un aménagement de combles, quelques mois pour une extension ou une rénovation complète. Le planning est remis avant le démarrage." } },
+    { "@type": "Question", "name": "L'étude est-elle vraiment gratuite ?", "acceptedAnswer": { "@type": "Answer", "text": "Oui. Terrexo étudie le potentiel de votre maison et vous remet une première vision et une estimation, sans engagement." } },
+    { "@type": "Question", "name": "Puis-je rester habiter pendant les travaux ?", "acceptedAnswer": { "@type": "Answer", "text": "Souvent oui, en particulier pour les combles et les extensions. Le chantier est organisé pour limiter la gêne au quotidien." } },
+    { "@type": "Question", "name": "Intervenez-vous dans tout le Luxembourg ?", "acceptedAnswer": { "@type": "Answer", "text": "Oui. Depuis l'atelier de Beggen, Terrexo intervient sur l'ensemble du Grand-Duché de Luxembourg." } }
+  ]
+}
+</script>
 </head>
 <body>
 <a class="skip-link" href="#expertise">Aller au contenu</a>
@@ -66,104 +80,186 @@
 
 <main>
 
-  <!-- ===== FILM : la maison qui se transforme ===== -->
-  <section class="film" id="film" aria-label="La transformation de votre maison">
-    <div class="film-stage">
+  <!-- ===== FILM CINÉMATIQUE : la maison qui se transforme au scroll ===== -->
+  <section class="film cine" id="film" aria-label="La transformation de votre maison">
+    <div class="film-pin">
+      <div class="film-bg" aria-hidden="true"><div class="film-grid"></div></div>
 
-      <!-- 1 — La maison d'aujourd'hui -->
-      <article class="fr" data-cam="in">
-        <div class="fr-img" style="background-image:url('assets/img/f01.webp')"></div>
-        <div class="cap">
+      <!-- 01 — Intro néon : la maison détourée -->
+      <div class="film-layer is-hero" data-type="house">
+        <div class="ly-platform"></div>
+        <img class="ly-house" src="assets/img/house.png" alt="Maison traditionnelle au Luxembourg avant transformation par Terrexo" width="1504" height="1023">
+      </div>
+
+      <!-- 02 — Lecture architecturale -->
+      <div class="film-layer" data-type="video">
+        <video data-src="assets/video/morph1.mp4" poster="assets/img/posters/morph1.webp" muted loop playsinline preload="none" disablepictureinpicture></video>
+      </div>
+
+      <!-- 03 — Les combles révélés -->
+      <div class="film-layer" data-type="video">
+        <video data-src="assets/video/morph2.mp4" poster="assets/img/posters/morph2.webp" muted loop playsinline preload="none" disablepictureinpicture></video>
+      </div>
+
+      <!-- 04 — L'extension -->
+      <div class="film-layer" data-type="video">
+        <video data-src="assets/video/morph3.mp4" poster="assets/img/posters/morph3.webp" muted loop playsinline preload="none" disablepictureinpicture></video>
+      </div>
+
+      <!-- 05 — Lucarnes & lumière -->
+      <div class="film-layer" data-type="video">
+        <video data-src="assets/video/morph4.mp4" poster="assets/img/posters/morph4.webp" muted loop playsinline preload="none" disablepictureinpicture></video>
+      </div>
+
+      <!-- 06 — Le seuil -->
+      <div class="film-layer" data-type="video">
+        <video data-src="assets/video/morph5.mp4" poster="assets/img/posters/morph5.webp" muted loop playsinline preload="none" disablepictureinpicture></video>
+      </div>
+
+      <!-- 07 — L'intérieur dévoilé -->
+      <div class="film-layer" data-type="video">
+        <video data-src="assets/video/morph6.mp4" poster="assets/img/posters/morph6.webp" muted loop playsinline preload="none" disablepictureinpicture></video>
+      </div>
+
+      <!-- 08 — La cuisine transformée -->
+      <div class="film-layer" data-type="video">
+        <video data-src="assets/video/morph7.mp4" poster="assets/img/posters/morph7.webp" muted loop playsinline preload="none" disablepictureinpicture></video>
+      </div>
+
+      <!-- 09 — La révélation -->
+      <div class="film-layer" data-type="video">
+        <video data-src="assets/video/morph8.mp4" poster="assets/img/posters/morph8.webp" muted loop playsinline preload="none" disablepictureinpicture></video>
+      </div>
+
+      <div class="film-veil" aria-hidden="true"></div>
+
+      <div class="film-caps">
+        <div class="film-cap" data-i="0">
           <span class="cap-k">01 — Votre maison aujourd'hui</span>
-          <h1 class="cap-t">Vous pensez connaître<br>votre maison.</h1>
+          <h1 class="cap-t">Vous pensez connaître<br><em>votre maison.</em></h1>
         </div>
-      </article>
-
-      <!-- 2 — Scan architectural -->
-      <article class="fr" data-cam="out">
-        <div class="fr-img" style="background-image:url('assets/img/f02.webp')"></div>
-        <div class="cap">
+        <div class="film-cap" data-i="1">
           <span class="cap-k">02 — Lecture architecturale</span>
           <h2 class="cap-t">Nous voyons ce que<br>vous ne <em>voyez pas</em>.</h2>
         </div>
-      </article>
-
-      <!-- 3 — Les espaces cachés -->
-      <article class="fr" data-cam="in">
-        <div class="fr-img" style="background-image:url('assets/img/f03.webp')"></div>
-        <div class="cap">
-          <span class="cap-k">03 — Les espaces cachés</span>
+        <div class="film-cap" data-i="2">
+          <span class="cap-k">03 — Les combles révélés</span>
           <h2 class="cap-t">Des mètres carrés<br><em>déjà présents</em>.</h2>
         </div>
-      </article>
-
-      <!-- 4 — L'extension -->
-      <article class="fr" data-cam="out">
-        <div class="fr-img" style="background-image:url('assets/img/f04.webp')"></div>
-        <div class="cap">
+        <div class="film-cap" data-i="3">
           <span class="cap-k">04 — L'extension</span>
-          <h2 class="cap-t">Plus d'espace.<br><em>Sans déménager.</em></h2>
+          <h2 class="cap-t">Repousser les murs,<br><em>sans déménager</em>.</h2>
         </div>
-      </article>
-
-      <!-- 5 — Les lucarnes (texte intégré à l'image) -->
-      <article class="fr" data-cam="in">
-        <div class="fr-img" style="background-image:url('assets/img/f05.webp')"></div>
-      </article>
-
-      <!-- 6 — La maison révélée (respiration, golden hour) -->
-      <article class="fr" data-cam="out">
-        <div class="fr-img" style="background-image:url('assets/img/f05b.webp')"></div>
-      </article>
-
-      <!-- 7 — Entrez chez vous -->
-      <article class="fr" data-cam="in">
-        <div class="fr-img" style="background-image:url('assets/img/f06.webp')"></div>
-        <div class="cap">
-          <span class="cap-k">05 — La lumière entre</span>
+        <div class="film-cap" data-i="4">
+          <span class="cap-k">05 — Lucarnes &amp; lumière</span>
+          <h2 class="cap-t">Plus d'espace.<br><em>Plus de lumière.</em></h2>
+        </div>
+        <div class="film-cap" data-i="5">
+          <span class="cap-k">06 — Le seuil</span>
           <h2 class="cap-t">Entrez <em>chez vous</em>.</h2>
         </div>
-      </article>
-
-      <!-- 8 — La cuisine avant -->
-      <article class="fr" data-cam="out">
-        <div class="fr-img" style="background-image:url('assets/img/f07.webp')"></div>
-        <div class="cap">
-          <span class="cap-k">06 — Aujourd'hui</span>
-          <h2 class="cap-t">Vous vivez avec<br>ce qui <em>existe</em>.</h2>
+        <div class="film-cap" data-i="6">
+          <span class="cap-k">07 — L'intérieur dévoilé</span>
+          <h2 class="cap-t">Chaque pièce,<br><em>repensée</em>.</h2>
         </div>
-      </article>
-
-      <!-- 9 — La vie dans la maison (vidéo, légende intégrée à l'image) -->
-      <article class="fr" data-cam="still">
-        <video src="assets/video/kitchen.mp4" poster="assets/img/f09.webp" muted loop playsinline preload="none"></video>
-      </article>
-
-      <!-- 10 — Révélation finale (texte intégré) + CTA réel -->
-      <article class="fr" data-cam="in">
-        <div class="fr-img" style="background-image:url('assets/img/f10.webp')"></div>
-        <div class="film-cta">
-          <a class="btn-gold" href="#contact">Étudier mon projet <span aria-hidden="true">→</span></a>
+        <div class="film-cap" data-i="7">
+          <span class="cap-k">08 — La cuisine transformée</span>
+          <h2 class="cap-t">Le quotidien,<br><em>sublimé</em>.</h2>
         </div>
-      </article>
+        <div class="film-cap" data-i="8">
+          <span class="cap-k">09 — La révélation</span>
+          <h2 class="cap-t">Votre maison n'a jamais eu<br>autant de <em>potentiel</em>.</h2>
+          <a class="btn-gold scene-cta" href="#contact">Étudier mon projet <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
 
-      <div class="film-prog" aria-hidden="true"></div>
-      <div class="film-hint" aria-hidden="true">Faites défiler<b>↓</b></div>
+      <div class="film-hint scrollhint" aria-hidden="true">Faites défiler <b>↓</b></div>
+      <nav class="cine-prog" aria-label="Navigation entre les scènes"></nav>
+    </div>
+    <div class="film-bar" aria-hidden="true"></div>
+  </section>
+
+  <!-- ===== MANIFESTE ===== -->
+  <section class="manifesto sec--dark">
+    <div class="wrap">
+      <p class="eyebrow mono reveal">Le potentiel révélé</p>
+      <p class="manifesto-q reveal" data-d="1">La plupart des maisons ne sont pas à remplacer. Elles sont à <em>révéler</em>. Sous chaque toit dorment des mètres carrés, de la lumière et une autre façon de vivre — il suffit de savoir les faire apparaître.</p>
+      <p class="manifesto-sign mono reveal" data-d="2">Terrexo — Révélateur de potentiel · Luxembourg</p>
     </div>
   </section>
 
   <!-- ===== EXPERTISE ===== -->
   <section class="expertise" id="expertise">
     <div class="wrap">
-      <p class="eyebrow mono">Notre expertise</p>
-      <h2 class="sec-title">Terrexo ne réalise pas seulement des travaux.<br><em>Nous révélons le potentiel d'une maison.</em></h2>
+      <p class="eyebrow mono reveal">Notre expertise</p>
+      <h2 class="sec-title reveal" data-d="1">Terrexo ne réalise pas seulement des travaux.<br><em>Nous révélons le potentiel d'une maison.</em></h2>
       <ul class="exp-list">
-        <li><span class="exp-no mono">01</span><h3>Extensions de maisons</h3><p>Ossature bois ou béton, parfaitement intégrées à l'existant.</p></li>
-        <li><span class="exp-no mono">02</span><h3>Aménagement de combles</h3><p>Des mètres carrés habitables révélés sous votre toit.</p></li>
-        <li><span class="exp-no mono">03</span><h3>Création de lucarnes</h3><p>Plus de lumière naturelle, plus de volume, plus de standing.</p></li>
-        <li><span class="exp-no mono">04</span><h3>Rénovations complètes</h3><p>Même structure, nouvelle expérience de vie — clé en main.</p></li>
-        <li><span class="exp-no mono">05</span><h3>Transformation architecturale</h3><p>Une maison traditionnelle devient une résidence d'exception.</p></li>
+        <li class="reveal"><span class="exp-no mono">01</span><h3>Extensions de maisons</h3><p>Ossature bois ou béton, parfaitement intégrées à l'existant.</p></li>
+        <li class="reveal"><span class="exp-no mono">02</span><h3>Aménagement de combles</h3><p>Des mètres carrés habitables révélés sous votre toit.</p></li>
+        <li class="reveal"><span class="exp-no mono">03</span><h3>Création de lucarnes</h3><p>Plus de lumière naturelle, plus de volume, plus de standing.</p></li>
+        <li class="reveal"><span class="exp-no mono">04</span><h3>Rénovations complètes</h3><p>Même structure, nouvelle expérience de vie — clé en main.</p></li>
+        <li class="reveal"><span class="exp-no mono">05</span><h3>Transformation architecturale</h3><p>Une maison traditionnelle devient une résidence d'exception.</p></li>
       </ul>
+    </div>
+  </section>
+
+  <!-- ===== APPROCHE ===== -->
+  <section class="approche" id="approche">
+    <div class="wrap">
+      <p class="eyebrow mono reveal">Notre méthode</p>
+      <h2 class="sec-title reveal" data-d="1">Une transformation maîtrisée,<br><em>du premier croquis aux clés.</em></h2>
+      <ol class="steps">
+        <li class="step reveal" data-d="1"><span class="step-n">01 — Étude</span><h3>Étude &amp; écoute</h3><p>Nous visitons, mesurons et comprenons votre maison et vos envies. Étude de potentiel offerte.</p></li>
+        <li class="step reveal" data-d="2"><span class="step-n">02 — Conception</span><h3>Conception</h3><p>Plans, volumes, lumière : nous dessinons la transformation et son budget, sans surprise.</p></li>
+        <li class="step reveal" data-d="3"><span class="step-n">03 — Réalisation</span><h3>Réalisation</h3><p>Une seule équipe pilote le chantier — gros œuvre, combles, lucarnes, finitions.</p></li>
+        <li class="step reveal" data-d="4"><span class="step-n">04 — Livraison</span><h3>Livraison</h3><p>Vous récupérez une maison transformée, propre et prête à vivre. Clé en main.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===== ENGAGEMENTS ===== -->
+  <section class="engage sec--dark2">
+    <div class="wrap">
+      <p class="eyebrow mono reveal">Pourquoi Terrexo</p>
+      <h2 class="sec-title reveal" data-d="1">Un seul interlocuteur,<br><em>du potentiel à la livraison.</em></h2>
+      <div class="engage-grid">
+        <div class="engage-item reveal" data-d="1"><span class="engage-k">2018</span><span class="engage-l">Année de création</span></div>
+        <div class="engage-item reveal" data-d="2"><span class="engage-k">Beggen</span><span class="engage-l">Atelier au Luxembourg</span></div>
+        <div class="engage-item reveal" data-d="3"><span class="engage-k">A → Z</span><span class="engage-l">Maître d'œuvre unique</span></div>
+        <div class="engage-item reveal" data-d="4"><span class="engage-k">0 €</span><span class="engage-l">Étude &amp; devis offerts</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RÉALISATIONS / AVANT-APRÈS ===== -->
+  <section class="realis" id="realisations">
+    <div class="wrap">
+      <p class="eyebrow mono reveal">La transformation</p>
+      <h2 class="sec-title reveal" data-d="1">D'une maison traditionnelle<br><em>à une résidence d'exception.</em></h2>
+      <div class="ba reveal" data-d="2" data-ba>
+        <div class="ba-after"><img src="assets/img/scenes/05_lucarnes.webp" alt="La maison transformée par Terrexo — extension et combles, à l'heure dorée" width="1536" height="1024" loading="lazy"></div>
+        <div class="ba-before"><img src="assets/img/scenes/01_maison.webp" alt="La maison traditionnelle avant transformation" width="1536" height="1024" loading="lazy"></div>
+        <span class="ba-tag is-before">Avant</span>
+        <span class="ba-tag is-after">Après</span>
+        <div class="ba-handle" aria-hidden="true"></div>
+        <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Comparer avant et après">
+      </div>
+      <p class="realis-note reveal">Glissez le curseur pour comparer · illustration de transformation</p>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="faq" id="faq">
+    <div class="wrap">
+      <p class="eyebrow mono reveal">Questions fréquentes</p>
+      <h2 class="sec-title reveal" data-d="1">Tout savoir avant<br><em>de transformer votre maison.</em></h2>
+      <div class="faq-list reveal" data-d="2">
+        <details><summary>Faut-il une autorisation pour une extension ou des combles ?</summary><p>Dans la plupart des communes luxembourgeoises, oui. Nous réalisons l'étude de faisabilité et vous accompagnons dans les démarches d'autorisation de bâtir.</p></details>
+        <details><summary>Combien de temps dure un chantier ?</summary><p>Selon l'ampleur : quelques semaines pour un aménagement de combles, quelques mois pour une extension ou une rénovation complète. Le planning vous est remis avant le démarrage.</p></details>
+        <details><summary>L'étude est-elle vraiment gratuite ?</summary><p>Oui. Nous étudions le potentiel de votre maison et vous remettons une première vision et une estimation, sans engagement.</p></details>
+        <details><summary>Puis-je rester habiter pendant les travaux ?</summary><p>Souvent oui, en particulier pour les combles et les extensions. Nous organisons le chantier pour limiter la gêne au quotidien.</p></details>
+        <details><summary>Intervenez-vous dans tout le Luxembourg ?</summary><p>Oui. Depuis notre atelier de Beggen, nous intervenons sur l'ensemble du Grand-Duché.</p></details>
+      </div>
     </div>
   </section>
 
@@ -171,17 +267,17 @@
   <section class="contact" id="contact">
     <div class="wrap contact-grid">
       <div class="contact-text">
-        <p class="eyebrow mono">Étude gratuite</p>
-        <h2 class="sec-title">Vous n'avez peut-être pas besoin de déménager.<br><em>Simplement de transformer votre maison.</em></h2>
-        <p class="contact-lead">Parlons de votre projet. Nous étudions le potentiel de votre maison et vous remettons une vision claire, sans engagement.</p>
-        <div class="contact-rows">
+        <p class="eyebrow mono reveal">Étude gratuite</p>
+        <h2 class="sec-title reveal" data-d="1">Vous n'avez peut-être pas besoin de déménager.<br><em>Simplement de transformer votre maison.</em></h2>
+        <p class="contact-lead reveal" data-d="2">Parlons de votre projet. Nous étudions le potentiel de votre maison et vous remettons une vision claire, sans engagement.</p>
+        <div class="contact-rows reveal" data-d="3">
           <a href="tel:+352691591951"><span class="mono">Téléphone</span>+352 691 591 951</a>
           <a href="mailto:info@terrexo.lu"><span class="mono">E-mail</span>info@terrexo.lu</a>
           <p><span class="mono">Bureau</span>182 Rue de Beggen, 1220 Beggen · Luxembourg</p>
         </div>
       </div>
 
-      <form class="form" id="devis-form" novalidate>
+      <form class="form reveal" data-d="2" id="devis-form" novalidate>
         <label>Nom<input type="text" name="nom" autocomplete="name" required></label>
         <label>E-mail<input type="email" name="email" autocomplete="email" required></label>
         <label>Téléphone<input type="tel" name="tel" autocomplete="tel"></label>
@@ -197,10 +293,18 @@
   <div class="wrap ft-inner">
     <img class="ft-logo" src="assets/terrexo-logo.svg" alt="Terrexo" width="132" height="34">
     <p class="ft-tag">Révélateur de potentiel · Rénovation &amp; extension au Luxembourg.</p>
+    <nav class="ft-nav" aria-label="Sections">
+      <a href="#expertise">Expertise</a>
+      <a href="#approche">Méthode</a>
+      <a href="#realisations">Transformation</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
+      <a href="tel:+352691591951">+352 691 591 951</a>
+    </nav>
     <p class="ft-legal">© <span id="year">2026</span> Terrexo Construct S.à r.l. — RCS Luxembourg B 238 691 · <span class="mono">49.628°N, 6.138°E</span></p>
   </div>
 </footer>
 
-<script src="assets/js/film.js" defer></script>
+<script src="assets/js/cinematic.js" defer></script>
 </body>
 </html>

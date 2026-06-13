@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Terrexo — Stage (aperçu néon)</title>
+<link rel="stylesheet" href="assets/css/fonts.css">
+<style>
+  :root{
+    --gold-soft:#c6a86a;
+    --font-mono:'JetBrains Mono',ui-monospace,monospace;
+    --c1:217,70,200;   /* néon magenta (piloté au scroll) */
+    --c2:60,120,255;   /* néon bleu    (piloté au scroll) */
+    --p1x:28%; --p1y:32%;
+    --p2x:74%; --p2y:64%;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:auto;}
+  body{font-family:'Inter',system-ui,sans-serif;color:#fff;background:#05060a;
+    min-height:320vh;} /* page longue pour démontrer l'évolution au scroll */
+
+  /* ===== STAGE fixe plein écran ===== */
+  .stage{position:fixed;inset:0;overflow:hidden;z-index:0;background:#05060a;}
+
+  /* deux halos néon dont la couleur + position évoluent au scroll */
+  .stage::before{content:"";position:absolute;inset:-15%;z-index:0;
+    background:
+      radial-gradient(34% 34% at var(--p1x) var(--p1y), rgba(var(--c1),.38) 0%, rgba(var(--c1),.10) 34%, transparent 58%),
+      radial-gradient(36% 36% at var(--p2x) var(--p2y), rgba(var(--c2),.34) 0%, rgba(var(--c2),.09) 36%, transparent 60%);
+    filter:blur(55px);
+    transition:background .15s linear;}
+
+  /* voile sombre pour garder le quasi-noir profond */
+  .stage::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:
+      radial-gradient(120% 100% at 50% 42%, transparent 46%, rgba(0,0,0,.62) 100%),
+      linear-gradient(180deg, rgba(5,6,10,.30) 0%, rgba(5,6,10,0) 30%, rgba(5,6,10,.55) 100%);}
+
+  /* grille technique */
+  .grid{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.6;
+    background:
+      linear-gradient(rgba(150,170,220,.05) 1px, transparent 1px) 0 0/66px 66px,
+      linear-gradient(90deg, rgba(150,170,220,.05) 1px, transparent 1px) 0 0/66px 66px;
+    -webkit-mask-image:radial-gradient(120% 90% at 50% 45%, #000 30%, transparent 78%);
+            mask-image:radial-gradient(120% 90% at 50% 45%, #000 30%, transparent 78%);
+    animation:gridDrift 26s linear infinite;}
+  @keyframes gridDrift{0%{background-position:0 0,0 0;}100%{background-position:0 66px,66px 0;}}
+
+  /* maison centrée + socle */
+  .house-wrap{position:fixed;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;}
+  .platform{position:absolute;left:50%;top:73%;transform:translateX(-50%);
+    width:52vw;height:18vh;border-radius:50%;
+    background:radial-gradient(closest-side, rgba(var(--c2),.45), rgba(var(--c1),.14) 55%, transparent 76%);
+    filter:blur(26px);}
+  .house{position:relative;max-width:60vw;max-height:62vh;object-fit:contain;
+    filter:drop-shadow(0 30px 55px rgba(0,0,0,.7));
+    animation:float 7s ease-in-out infinite;}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+
+  /* légende fixe */
+  .cap{position:fixed;left:clamp(24px,5vw,76px);bottom:clamp(48px,10vh,96px);z-index:4;max-width:min(760px,82vw);}
+  .cap-k{display:block;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.22em;
+    font-size:.7rem;color:var(--gold-soft);margin-bottom:14px;opacity:.92;}
+  .cap-t{font-size:clamp(2rem,5.4vw,4.4rem);line-height:1.02;letter-spacing:-.025em;font-weight:600;
+    text-shadow:0 2px 40px rgba(0,0,0,.6);}
+  .cap-t em{color:var(--gold-soft);font-weight:500;font-style:normal;}
+
+  .note{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:6;
+    font-family:var(--font-mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+    color:rgba(255,255,255,.4);}
+  .scrollhint{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:6;
+    font-family:var(--font-mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+    color:rgba(255,255,255,.5);}
+</style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <div class="grid"></div>
+  </div>
+  <div class="house-wrap">
+    <div class="platform"></div>
+    <img class="house" src="assets/img/house.png" alt="Maison">
+  </div>
+  <div class="cap">
+    <span class="cap-k">01 — Votre maison aujourd'hui</span>
+    <div class="cap-t">Vous pensez connaître<br><em>votre maison.</em></div>
+  </div>
+  <div class="note">Aperçu stage néon — le fond évolue au scroll</div>
+  <div class="scrollhint">Faites défiler ↓</div>
+
+<script>
+(function(){
+  var root = document.documentElement.style;
+  // paliers de palette néon (r,g,b) — magenta/rose ←→ bleu/cyan/violet
+  var keys = [
+    {at:0.00, c1:[224,64,196], c2:[58,118,255], p1:[10,12], p2:[90,88]}, // magenta coin h-g + bleu coin b-d
+    {at:0.50, c1:[150,70,255], c2:[40,200,235], p1:[8,90],  p2:[92,10]}, // violet coin b-g + cyan coin h-d
+    {at:1.00, c1:[255,70,150], c2:[60,120,255], p1:[12,10], p2:[88,90]}  // rose coin h-g + bleu coin b-d
+  ];
+  function lerp(a,b,t){return a+(b-a)*t;}
+  function mix(a,b,t){return [Math.round(lerp(a[0],b[0],t)),Math.round(lerp(a[1],b[1],t)),Math.round(lerp(a[2],b[2],t))];}
+  function update(){
+    var max = document.body.scrollHeight - window.innerHeight;
+    var p = max>0 ? Math.min(1,Math.max(0, window.scrollY/max)) : 0;
+    // trouver le segment
+    var i=0; while(i<keys.length-1 && p>keys[i+1].at) i++;
+    var a=keys[i], b=keys[Math.min(i+1,keys.length-1)];
+    var t = b.at>a.at ? (p-a.at)/(b.at-a.at) : 0;
+    var c1=mix(a.c1,b.c1,t), c2=mix(a.c2,b.c2,t);
+    var p1=[lerp(a.p1[0],b.p1[0],t),lerp(a.p1[1],b.p1[1],t)];
+    var p2=[lerp(a.p2[0],b.p2[0],t),lerp(a.p2[1],b.p2[1],t)];
+    root.setProperty('--c1', c1.join(','));
+    root.setProperty('--c2', c2.join(','));
+    root.setProperty('--p1x', p1[0].toFixed(1)+'%');
+    root.setProperty('--p1y', p1[1].toFixed(1)+'%');
+    root.setProperty('--p2x', p2[0].toFixed(1)+'%');
+    root.setProperty('--p2y', p2[1].toFixed(1)+'%');
+  }
+  var tick=false;
+  window.addEventListener('scroll', function(){ if(!tick){tick=true;requestAnimationFrame(function(){update();tick=false;});} }, {passive:true});
+  window.addEventListener('resize', update, {passive:true});
+  update();
+})();
+</script>
+</body>
+</html>
