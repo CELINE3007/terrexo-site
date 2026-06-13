@@ -24,7 +24,7 @@
 <link rel="manifest" href="site.webmanifest">
 
 <link rel="preload" href="assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/img/house.png" as="image">
+<link rel="preload" href="assets/img/posters/film.webp" as="image">
 <link rel="stylesheet" href="assets/css/fonts.css">
 <link rel="stylesheet" href="assets/css/story.css">
 <link rel="stylesheet" href="assets/css/cinematic.css">
@@ -85,50 +85,10 @@
     <div class="film-pin">
       <div class="film-bg" aria-hidden="true"><div class="film-grid"></div></div>
 
-      <!-- 01 — Intro néon : la maison détourée -->
-      <div class="film-layer is-hero" data-type="house">
-        <div class="ly-platform"></div>
-        <img class="ly-house" src="assets/img/house.png" alt="Maison traditionnelle au Luxembourg avant transformation par Terrexo" width="1504" height="1023">
-      </div>
-
-      <!-- 02 — Lecture architecturale -->
-      <div class="film-layer" data-type="video">
-        <video data-src="assets/video/morph1.mp4" poster="assets/img/posters/morph1.webp" muted loop playsinline preload="none" disablepictureinpicture></video>
-      </div>
-
-      <!-- 03 — Les combles révélés -->
-      <div class="film-layer" data-type="video">
-        <video data-src="assets/video/morph2.mp4" poster="assets/img/posters/morph2.webp" muted loop playsinline preload="none" disablepictureinpicture></video>
-      </div>
-
-      <!-- 04 — L'extension -->
-      <div class="film-layer" data-type="video">
-        <video data-src="assets/video/morph3.mp4" poster="assets/img/posters/morph3.webp" muted loop playsinline preload="none" disablepictureinpicture></video>
-      </div>
-
-      <!-- 05 — Lucarnes & lumière -->
-      <div class="film-layer" data-type="video">
-        <video data-src="assets/video/morph4.mp4" poster="assets/img/posters/morph4.webp" muted loop playsinline preload="none" disablepictureinpicture></video>
-      </div>
-
-      <!-- 06 — Le seuil -->
-      <div class="film-layer" data-type="video">
-        <video data-src="assets/video/morph5.mp4" poster="assets/img/posters/morph5.webp" muted loop playsinline preload="none" disablepictureinpicture></video>
-      </div>
-
-      <!-- 07 — L'intérieur dévoilé -->
-      <div class="film-layer" data-type="video">
-        <video data-src="assets/video/morph6.mp4" poster="assets/img/posters/morph6.webp" muted loop playsinline preload="none" disablepictureinpicture></video>
-      </div>
-
-      <!-- 08 — La cuisine transformée -->
-      <div class="film-layer" data-type="video">
-        <video data-src="assets/video/morph7.mp4" poster="assets/img/posters/morph7.webp" muted loop playsinline preload="none" disablepictureinpicture></video>
-      </div>
-
-      <!-- 09 — La révélation -->
-      <div class="film-layer" data-type="video">
-        <video data-src="assets/video/morph8.mp4" poster="assets/img/posters/morph8.webp" muted loop playsinline preload="none" disablepictureinpicture></video>
+      <!-- Film continu unique : un seul décodeur, scrub fluide -->
+      <div class="film-stage">
+        <video class="film-video" src="assets/video/film.mp4" poster="assets/img/posters/film.webp"
+               muted playsinline preload="auto" disablepictureinpicture></video>
       </div>
 
       <div class="film-veil" aria-hidden="true"></div>

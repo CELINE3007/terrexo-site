@@ -42,22 +42,11 @@
   animation:gridDrift 26s linear infinite;}
 @keyframes gridDrift{0%{background-position:0 0,0 0;}100%{background-position:0 66px,66px 0;}}
 
-/* --- Couches média empilées (opacité pilotée au scroll => fondus) --- */
-.film-layer{position:absolute;inset:0;z-index:2;opacity:0;will-change:opacity;
+/* --- Film continu : une seule vidéo plein cadre --- */
+.film-stage{position:absolute;inset:0;z-index:2;}
+.film-video{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center 44%;background:#05060a;
   backface-visibility:hidden;}
-.film-layer video,
-.film-layer .ly-img{position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;will-change:transform;}
-.ly-img{background-size:cover;background-position:center;}
-
-/* Couche intro : maison détourée centrée + socle néon */
-.film-layer.is-hero{display:flex;align-items:center;justify-content:center;opacity:1;}
-.film-layer.is-hero .ly-platform{position:absolute;left:50%;top:73%;transform:translateX(-50%);
-  width:52vw;height:18vh;border-radius:50%;
-  background:radial-gradient(closest-side, rgba(var(--c2),.45), rgba(var(--c1),.14) 55%, transparent 76%);
-  filter:blur(26px);}
-.film-layer.is-hero .ly-house{position:relative;width:auto;height:auto;max-width:60vw;max-height:60vh;
-  object-fit:contain;filter:drop-shadow(0 30px 55px rgba(0,0,0,.7));will-change:transform;}
 
 /* Voile pour la lisibilité du texte */
 .film-veil{position:absolute;inset:0;z-index:3;pointer-events:none;
@@ -95,8 +84,9 @@
 .cine-prog button.on{background:var(--gold-soft);transform:scale(1.35);}
 
 @media (max-width:760px){
-  .film-layer.is-hero .ly-house{max-width:86vw;max-height:46vh;}
-  .film-layer.is-hero .ly-platform{width:78vw;}
+  /* portrait : on montre le cadre entier, maison parfaitement centrée
+     (le fond néon habille les bandes) plutôt que de recadrer agressivement */
+  .film-video{object-fit:contain;object-position:center center;}
   .cine-prog{display:none;}
 }
 
@@ -104,13 +94,17 @@
    Le JS bascule en mode empilé pour prefers-reduced-motion.
    En l'absence de JS, on dépile aussi proprement.            */
 .is-static .film-pin{position:static;height:auto;}
-.is-static .film-layer{position:relative;height:100svh;opacity:1!important;visibility:visible!important;}
+.is-static .film-stage{position:relative;height:auto;}
+.is-static .film-video{position:relative;height:auto;aspect-ratio:1280/742;object-fit:contain;}
 .is-static .film-veil{display:none;}
 .is-static .film-bar,.is-static .film-hint{display:none;}
+.is-static .film-caps{position:static;}
+.is-static .film-cap{position:static;margin:24px auto 0;left:auto;bottom:auto;}
 
 html:not(.js) .film{height:auto!important;}
 html:not(.js) .film-pin{position:static;height:auto;}
-html:not(.js) .film-layer{position:relative;height:100svh;opacity:1;}
+html:not(.js) .film-stage{position:relative;}
+html:not(.js) .film-video{position:relative;height:auto;aspect-ratio:1280/742;object-fit:contain;}
 html:not(.js) .film-bg{position:absolute;}
 html:not(.js) .film-veil{display:none;}
 html:not(.js) .film-cap{opacity:1;}
