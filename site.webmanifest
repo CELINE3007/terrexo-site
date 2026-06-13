@@ -1,0 +1,14 @@
+{
+  "name": "Terrexo — Rénovation & extension au Luxembourg",
+  "short_name": "Terrexo",
+  "description": "Artisans rénovateurs au Luxembourg : extensions, combles, rénovations et salles de bains.",
+  "lang": "fr",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F5F2EB",
+  "theme_color": "#1E3A2B",
+  "icons": [
+    { "src": "/assets/favicon-32x32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "/assets/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

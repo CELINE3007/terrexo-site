@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+
+# Fichiers de travail (sources lourdes / brouillons — non nécessaires au site déployé)
+image site/
+extracted_text.txt
+source_fr.html
+
+# Outils locaux
+.claude/
