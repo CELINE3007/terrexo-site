@@ -85,10 +85,12 @@
     <div class="film-pin">
       <div class="film-bg" aria-hidden="true"><div class="film-grid"></div></div>
 
-      <!-- Film continu unique : un seul décodeur, scrub fluide -->
+      <!-- Film continu unique : un seul décodeur, scrub fluide.
+           Chargé en Blob par JS (data-src) pour un scrub fiable même quand
+           le serveur ne gère pas les requêtes Range (Safari/Firefox). -->
       <div class="film-stage">
-        <video class="film-video" src="assets/video/film.mp4" poster="assets/img/posters/film.webp"
-               muted playsinline preload="auto" disablepictureinpicture></video>
+        <video class="film-video" data-src="assets/video/film.mp4" poster="assets/img/posters/film.webp"
+               muted playsinline preload="none" disablepictureinpicture></video>
       </div>
 
       <div class="film-veil" aria-hidden="true"></div>

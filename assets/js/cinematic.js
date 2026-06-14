@@ -93,17 +93,39 @@
   var running = false;
   var dots = [];
 
-  /* ---------- Amorçage de la vidéo ---------- */
+  /* ---------- Amorçage de la vidéo ----------
+     On charge le fichier entier en Blob puis on l'attribue via une URL objet.
+     Le navigateur dispose alors de tous les octets en local : le scrub
+     (seek) fonctionne dans TOUS les navigateurs, même quand le serveur
+     ne répond pas aux requêtes Range (cas de Cloudflare Pages -> Safari /
+     Firefox refusaient de chercher dans la vidéo). Repli : src direct. */
   function onMeta(){
     dur = (video.duration && isFinite(video.duration)) ? video.duration : 36;
     ready = true;
   }
-  if (video){
-    if (video.readyState >= 1) onMeta();
-    video.addEventListener('loadedmetadata', onMeta);
-    // play->pause muet : force le décodage initial (indispensable iOS/Safari)
+  function primeDecode(){
+    // play->pause muet : force le 1er décodage (peinture de l'image)
     var pr = video.play && video.play();
     if (pr && pr.then) pr.then(function(){ try{ video.pause(); }catch(e){} }).catch(function(){});
+  }
+  function attachSrc(src){
+    if (video.readyState >= 1) onMeta();
+    video.addEventListener('loadedmetadata', onMeta);
+    video.src = src;
+    video.load();
+    primeDecode();
+  }
+  if (video){
+    var srcUrl = video.getAttribute('data-src') || video.getAttribute('src');
+    var useBlob = ('fetch' in window) && ('URL' in window) && URL.createObjectURL;
+    if (useBlob && srcUrl){
+      fetch(srcUrl)
+        .then(function(r){ if(!r.ok) throw new Error('http '+r.status); return r.blob(); })
+        .then(function(blob){ attachSrc(URL.createObjectURL(blob)); })
+        .catch(function(){ attachSrc(srcUrl); }); // repli : lecture directe
+    } else if (srcUrl){
+      attachSrc(srcUrl);
+    }
   }
 
   /* ---------- Mise en page : hauteur de la section = course de scroll ---------- */
