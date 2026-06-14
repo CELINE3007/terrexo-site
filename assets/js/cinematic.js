@@ -92,6 +92,8 @@
   var ready = false;
   var running = false;
   var dots = [];
+  var FPS = 12;                  // cadence du film (all-intra) : 1 image = 1/FPS s
+  var lastSeekT = -1;            // dernière image réellement demandée (anti-doublon)
 
   /* ---------- Amorçage de la vidéo ----------
      On charge le fichier entier en Blob puis on l'attribue via une URL objet.
@@ -171,8 +173,15 @@
     var diff = targetT - curT;
     curT += diff * 0.16;
     if (Math.abs(diff) < 0.004){ curT = targetT; running = false; }
-    if (ready && video && Math.abs(video.currentTime - curT) > 0.012){
-      try { video.currentTime = curT; } catch (e){}
+    // On ne demande QUE le décodage d'une nouvelle image : curT est quantifié
+    // sur la grille d'images (1/FPS). Comme le film est all-intra, chaque seek
+    // ne décode qu'une seule image -> scrub léger, même sur petit processeur.
+    if (ready && video){
+      var frameT = Math.round(curT * FPS) / FPS;
+      if (frameT !== lastSeekT){
+        lastSeekT = frameT;
+        try { video.currentTime = frameT; } catch (e){}
+      }
     }
     if (running) requestAnimationFrame(tick);
   }
