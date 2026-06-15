@@ -22,13 +22,11 @@
 /* .film-pin = scène épinglée plein écran */
 .film-pin{position:sticky;top:0;height:100svh;min-height:560px;overflow:hidden;background:#05060a;}
 
-/* --- Fond néon (signature de l'intro, visible derrière la maison détourée) --- */
+/* --- Fond neutre (anthracite) derrière le canvas. Néon retiré (demande client). --- */
 .film-bg{position:absolute;inset:0;z-index:0;background:#05060a;}
 .film-bg::before{content:"";position:absolute;inset:-15%;
-  background:
-    radial-gradient(34% 34% at var(--p1x) var(--p1y), rgba(var(--c1),.40) 0%, rgba(var(--c1),.10) 34%, transparent 58%),
-    radial-gradient(36% 36% at var(--p2x) var(--p2y), rgba(var(--c2),.36) 0%, rgba(var(--c2),.09) 36%, transparent 60%);
-  filter:blur(55px);transition:background .15s linear;}
+  background:radial-gradient(60% 50% at 50% 40%, rgba(150,160,180,.05) 0%, transparent 70%);
+  filter:blur(55px);}
 .film-bg::after{content:"";position:absolute;inset:0;pointer-events:none;
   background:
     radial-gradient(120% 100% at 50% 42%, transparent 46%, rgba(0,0,0,.62) 100%),
@@ -58,6 +56,15 @@
 /* Voile pour la lisibilité du texte */
 .film-veil{position:absolute;inset:0;z-index:3;pointer-events:none;
   background:linear-gradient(180deg, rgba(5,6,10,.42) 0%, rgba(5,6,10,0) 26%, rgba(5,6,10,0) 50%, rgba(5,6,10,.82) 100%);}
+
+/* Voile sombre du tout début (frame 1) — opacité pilotée au scroll par le JS
+   (1 à l'arrêt → 0 dès qu'on défile). Vignette + voile plat : assombrit
+   l'image SANS toucher aux frames HD (qualité restaurée intacte). */
+.film-intro{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:1;
+  background:
+    radial-gradient(78% 68% at 50% 46%, rgba(5,6,10,0) 24%, rgba(5,6,10,.66) 100%),
+    rgba(5,6,10,.30);
+  transition:opacity .25s linear;}
 
 /* --- Légendes (une par segment, fondu au scroll) --- */
 .film-caps{position:absolute;inset:0;z-index:4;pointer-events:none;}

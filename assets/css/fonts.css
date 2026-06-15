@@ -9,11 +9,11 @@
 }
 
 @font-face {
-  font-family: 'Fraunces';
+  font-family: 'Lora';
   font-style: italic;
   font-weight: 400 600;
   font-display: swap;
-  src: url('../fonts/fraunces-italic-var.woff2') format('woff2');
+  src: url('../fonts/lora-italic-var.woff2') format('woff2');
 }
 
 @font-face {

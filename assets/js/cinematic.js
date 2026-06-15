@@ -1,5 +1,9 @@
 (function () {
   'use strict';
+  // NB : tout le moteur film est emballé dans un try/catch. Ainsi, si une
+  // erreur survient ici, elle est isolée et n'interrompt PAS le script :
+  // l'IIFE suivante (révélations au scroll des sections) s'exécute toujours.
+  try {
 
   var docEl = document.documentElement;
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -45,25 +49,6 @@
   function mix(a,b,t){ return [Math.round(lerp(a[0],b[0],t)),Math.round(lerp(a[1],b[1],t)),Math.round(lerp(a[2],b[2],t))]; }
   function smooth(t){ t = clamp01(t); return t*t*(3-2*t); }
 
-  /* ---------- Néon de fond qui évolue avec la progression du film ---------- */
-  var rootStyle = docEl.style;
-  var neonKeys = [
-    {at:0.00, c1:[224,64,196], c2:[58,118,255], p1:[12,16], p2:[88,84]},
-    {at:0.50, c1:[150,70,255], c2:[40,200,235], p1:[10,86], p2:[90,14]},
-    {at:1.00, c1:[255,70,150], c2:[60,120,255], p1:[14,12], p2:[86,88]}
-  ];
-  function neon(p){
-    var i = 0; while (i < neonKeys.length-1 && p > neonKeys[i+1].at) i++;
-    var a = neonKeys[i], b = neonKeys[Math.min(i+1, neonKeys.length-1)];
-    var t = b.at > a.at ? (p - a.at)/(b.at - a.at) : 0;
-    var c1 = mix(a.c1,b.c1,t), c2 = mix(a.c2,b.c2,t);
-    rootStyle.setProperty('--c1', c1.join(','));
-    rootStyle.setProperty('--c2', c2.join(','));
-    rootStyle.setProperty('--p1x', lerp(a.p1[0],b.p1[0],t).toFixed(1)+'%');
-    rootStyle.setProperty('--p1y', lerp(a.p1[1],b.p1[1],t).toFixed(1)+'%');
-    rootStyle.setProperty('--p2x', lerp(a.p2[0],b.p2[0],t).toFixed(1)+'%');
-    rootStyle.setProperty('--p2y', lerp(a.p2[1],b.p2[1],t).toFixed(1)+'%');
-  }
 
   /* ============================================================
      MOTEUR FILM — une seule vidéo continue, scrub lissé.
@@ -75,6 +60,7 @@
   if (!film) { headerLight(); window.addEventListener('scroll', headerLight, {passive:true}); return; }
 
   var pin    = film.querySelector('.film-pin');
+  var intro  = film.querySelector('.film-intro');
   var canvas = film.querySelector('.film-canvas');
   var caps   = Array.prototype.slice.call(film.querySelectorAll('.film-cap'));
   var bar    = film.querySelector('.film-bar');
@@ -83,7 +69,10 @@
   var ctx    = canvas ? canvas.getContext('2d') : null;
 
   var NC = caps.length;          // nombre de légendes (réparties sur 0..1)
-  var SCROLL_VH = 6.5;           // course de scroll (en hauteurs d'écran)
+  // Course de scroll (en hauteurs d'écran). 10 morphes sur 3.5 écrans
+  // => ~0.35 écran par morphe : un scroll fait défiler ~1 morphe (2 max),
+  // pacing « snappy » demandé par le client (sans casser le scrub lissé).
+  var SCROLL_VH = 3.5;
   var vh = window.innerHeight;
 
   var P = 0;                     // progression du scroll 0..1
@@ -98,7 +87,7 @@
      <canvas> au scroll. Aucun décodage vidéo => aucun à-coup, et
      la qualité HD source est conservée (rendu net à tout DPR).
      ============================================================ */
-  var FRAMES   = 180;            // nombre de frames extraites par dossier (20 × 9 morphes)
+  var FRAMES   = 200;            // 200 frames = 10 morphes × 20 (9 morphes + finale toit fermé 3/4), bornes propres
   var mobile   = window.matchMedia('(max-width:760px)').matches;
   var basePath = 'assets/img/film/' + (mobile ? 'm' : 'd') + '/';
   // cadrage : desktop = cover recadré vers le haut (44%) ; mobile = contain
@@ -220,9 +209,10 @@
     targetF = P * (FRAMES - 1);
     if (bar)  bar.style.width = (P * 100).toFixed(2) + '%';
     if (hint) hint.style.opacity = P > 0.02 ? '0' : '1';
+    // Voile de début : plein à l'arrêt, disparu après ~5 % de défilement.
+    if (intro) intro.style.opacity = (P >= 0.05 ? 0 : 1 - P / 0.05).toFixed(3);
     paintCaps();
     paintDots();
-    neon(P);
     headerLight();
     ensureRunning();
   }
@@ -272,6 +262,10 @@
     window.addEventListener('load', function (){ layout(); render(); });
     render();
   }
+
+  } catch (err) {
+    if (window.console && console.error) console.error('Terrexo — moteur film :', err);
+  }
 })();
 
 /* ============================================================
@@ -283,17 +277,19 @@
   'use strict';
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* --- Révélation --- */
+  /* --- Révélation ---
+     On garde l'observer même en reduced-motion : le CSS bascule alors sur un
+     simple fondu (sans rotation), donc l'apparition reste visible et accessible. */
   var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
   if (els.length) {
-    if (!('IntersectionObserver' in window) || reduced) {
+    if (!('IntersectionObserver' in window)) {
       els.forEach(function (e) { e.classList.add('in'); });
     } else {
       var io = new IntersectionObserver(function (ens) {
         ens.forEach(function (en) {
           if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
         });
-      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.12 });
+      }, { rootMargin: '0px 0px -18% 0px', threshold: 0.12 });
       els.forEach(function (e) { io.observe(e); });
     }
   }

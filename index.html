@@ -94,42 +94,45 @@
       </div>
 
       <div class="film-veil" aria-hidden="true"></div>
+      <!-- Voile sombre piloté au scroll : assombrit le tout début du film
+           (frame 1) puis s'efface dès qu'on défile. N'altère pas les frames HD. -->
+      <div class="film-intro" aria-hidden="true"></div>
 
       <div class="film-caps">
         <div class="film-cap" data-i="0">
-          <span class="cap-k">01 — Votre maison aujourd'hui</span>
-          <h1 class="cap-t">Vous pensez connaître<br><em>votre maison.</em></h1>
+          <span class="cap-k">Votre maison aujourd'hui</span>
+          <h1 class="cap-t">Vous pensez connaître<br><em>la valeur de votre maison ?</em></h1>
         </div>
         <div class="film-cap" data-i="1">
-          <span class="cap-k">02 — Lecture architecturale</span>
+          <span class="cap-k">Lecture architecturale</span>
           <h2 class="cap-t">Nous voyons ce que<br>vous ne <em>voyez pas</em>.</h2>
         </div>
         <div class="film-cap" data-i="2">
-          <span class="cap-k">03 — Les combles révélés</span>
+          <span class="cap-k">Les combles révélés</span>
           <h2 class="cap-t">Des mètres carrés<br><em>déjà présents</em>.</h2>
         </div>
         <div class="film-cap" data-i="3">
-          <span class="cap-k">04 — L'extension</span>
+          <span class="cap-k">L'extension</span>
           <h2 class="cap-t">Repousser les murs,<br><em>sans déménager</em>.</h2>
         </div>
         <div class="film-cap" data-i="4">
-          <span class="cap-k">05 — Lucarnes &amp; lumière</span>
+          <span class="cap-k">Lucarnes &amp; lumière</span>
           <h2 class="cap-t">Plus d'espace.<br><em>Plus de lumière.</em></h2>
         </div>
         <div class="film-cap" data-i="5">
-          <span class="cap-k">06 — Le seuil</span>
+          <span class="cap-k">Le seuil</span>
           <h2 class="cap-t">Entrez <em>chez vous</em>.</h2>
         </div>
         <div class="film-cap" data-i="6">
-          <span class="cap-k">07 — L'intérieur dévoilé</span>
+          <span class="cap-k">L'intérieur dévoilé</span>
           <h2 class="cap-t">Chaque pièce,<br><em>repensée</em>.</h2>
         </div>
         <div class="film-cap" data-i="7">
-          <span class="cap-k">08 — La cuisine transformée</span>
+          <span class="cap-k">La cuisine transformée</span>
           <h2 class="cap-t">Le quotidien,<br><em>sublimé</em>.</h2>
         </div>
         <div class="film-cap" data-i="8">
-          <span class="cap-k">09 — La révélation</span>
+          <span class="cap-k">La révélation</span>
           <h2 class="cap-t">Votre maison n'a jamais eu<br>autant de <em>potentiel</em>.</h2>
           <a class="btn-gold scene-cta" href="#contact">Étudier mon projet <span aria-hidden="true">→</span></a>
         </div>
@@ -141,12 +144,47 @@
     <div class="film-bar" aria-hidden="true"></div>
   </section>
 
-  <!-- ===== MANIFESTE ===== -->
-  <section class="manifesto sec--dark">
+  <!-- ===== EXPERTISE PAR ÉTAPE (section plein écran) =====
+       Emplacements photo prévus sous chaque étape : déposer les fichiers
+       assets/img/expertise/01-etude.webp … 04-livraison.webp puis remplacer
+       chaque <div class="etape-media"> par <img>. -->
+  <section class="etapes" id="approche" aria-label="Notre expertise à chaque étape">
     <div class="wrap">
-      <p class="eyebrow mono reveal">Le potentiel révélé</p>
-      <p class="manifesto-q reveal" data-d="1">La plupart des maisons ne sont pas à remplacer. Elles sont à <em>révéler</em>. Sous chaque toit dorment des mètres carrés, de la lumière et une autre façon de vivre — il suffit de savoir les faire apparaître.</p>
-      <p class="manifesto-sign mono reveal" data-d="2">Terrexo — Révélateur de potentiel · Luxembourg</p>
+      <header class="etapes-head">
+        <p class="eyebrow mono reveal">Notre méthode</p>
+        <h2 class="etapes-title reveal" data-d="1">Notre expertise à chaque étape<br><em>pour vos projets clé en main.</em></h2>
+        <p class="etapes-intro reveal" data-d="2">De la conception à la réalisation, toutes les étapes de votre projet sont pilotées en interne pour assurer un contrôle absolu de la qualité, une exécution sans compromis et des délais parfaitement maîtrisés.</p>
+      </header>
+      <ol class="etapes-grid">
+        <li class="etape reveal reveal--turn" data-d="1">
+          <h3>Étude &amp; écoute</h3>
+          <p>Nous visitons, mesurons et comprenons votre maison et vos envies. Étude de potentiel offerte.</p>
+          <div class="etape-media reveal reveal--turn" data-d="1">
+            <img src="assets/img/expertise/01-etude.webp" alt="Étude : visite et prise de mesures de votre maison" loading="lazy" decoding="async">
+          </div>
+        </li>
+        <li class="etape reveal reveal--turn" data-d="2">
+          <h3>Conception</h3>
+          <p>Plans, volumes, lumière : nous dessinons la transformation et son budget, sans surprise.</p>
+          <div class="etape-media reveal reveal--turn" data-d="2">
+            <img src="assets/img/expertise/02-conception.webp" alt="Conception : plans, volumes et lumière du projet" loading="lazy" decoding="async">
+          </div>
+        </li>
+        <li class="etape reveal reveal--turn" data-d="3">
+          <h3>Réalisation</h3>
+          <p>Une seule équipe pilote le chantier — gros œuvre, combles, lucarnes, finitions.</p>
+          <div class="etape-media reveal reveal--turn" data-d="3">
+            <img src="assets/img/expertise/03-realisation.webp" alt="Réalisation : chantier piloté par une seule équipe" loading="lazy" decoding="async">
+          </div>
+        </li>
+        <li class="etape reveal reveal--turn" data-d="4">
+          <h3>Livraison</h3>
+          <p>Vous récupérez une maison transformée, propre et prête à vivre. Clé en main.</p>
+          <div class="etape-media reveal reveal--turn" data-d="4">
+            <img src="assets/img/expertise/04-livraison.webp" alt="Livraison : maison transformée, propre et prête à vivre" loading="lazy" decoding="async">
+          </div>
+        </li>
+      </ol>
     </div>
   </section>
 
@@ -156,45 +194,158 @@
       <p class="eyebrow mono reveal">Notre expertise</p>
       <h2 class="sec-title reveal" data-d="1">Terrexo ne réalise pas seulement des travaux.<br><em>Nous révélons le potentiel d'une maison.</em></h2>
       <ul class="exp-list">
-        <li class="reveal"><span class="exp-no mono">01</span><h3>Extensions de maisons</h3><p>Ossature bois ou béton, parfaitement intégrées à l'existant.</p></li>
-        <li class="reveal"><span class="exp-no mono">02</span><h3>Aménagement de combles</h3><p>Des mètres carrés habitables révélés sous votre toit.</p></li>
-        <li class="reveal"><span class="exp-no mono">03</span><h3>Création de lucarnes</h3><p>Plus de lumière naturelle, plus de volume, plus de standing.</p></li>
-        <li class="reveal"><span class="exp-no mono">04</span><h3>Rénovations complètes</h3><p>Même structure, nouvelle expérience de vie — clé en main.</p></li>
-        <li class="reveal"><span class="exp-no mono">05</span><h3>Transformation architecturale</h3><p>Une maison traditionnelle devient une résidence d'exception.</p></li>
+        <li class="reveal"><h3>Extensions de maisons</h3><p>Ossature bois ou béton, parfaitement intégrées à l'existant.</p></li>
+        <li class="reveal"><h3>Aménagement de combles</h3><p>Des mètres carrés habitables révélés sous votre toit.</p></li>
+        <li class="reveal"><h3>Création de lucarnes</h3><p>Plus de lumière naturelle, plus de volume, plus de standing.</p></li>
+        <li class="reveal"><h3>Rénovations complètes</h3><p>Même structure, nouvelle expérience de vie — clé en main.</p></li>
+        <li class="reveal"><h3>Transformation architecturale</h3><p>Une maison traditionnelle devient une résidence d'exception.</p></li>
       </ul>
     </div>
   </section>
 
-  <!-- ===== APPROCHE ===== -->
-  <section class="approche" id="approche">
-    <div class="wrap">
-      <p class="eyebrow mono reveal">Notre méthode</p>
-      <h2 class="sec-title reveal" data-d="1">Une transformation maîtrisée,<br><em>du premier croquis aux clés.</em></h2>
-      <ol class="steps">
-        <li class="step reveal" data-d="1"><span class="step-n">01 — Étude</span><h3>Étude &amp; écoute</h3><p>Nous visitons, mesurons et comprenons votre maison et vos envies. Étude de potentiel offerte.</p></li>
-        <li class="step reveal" data-d="2"><span class="step-n">02 — Conception</span><h3>Conception</h3><p>Plans, volumes, lumière : nous dessinons la transformation et son budget, sans surprise.</p></li>
-        <li class="step reveal" data-d="3"><span class="step-n">03 — Réalisation</span><h3>Réalisation</h3><p>Une seule équipe pilote le chantier — gros œuvre, combles, lucarnes, finitions.</p></li>
-        <li class="step reveal" data-d="4"><span class="step-n">04 — Livraison</span><h3>Livraison</h3><p>Vous récupérez une maison transformée, propre et prête à vivre. Clé en main.</p></li>
-      </ol>
+  <!-- ===== NOS RÉALISATIONS : carrousel défilant (train) =====
+       Les photos sont des emplacements (assets/img/realisations/<slug>.webp).
+       Pour alimenter : écraser chaque fichier <slug>.webp par la vraie photo
+       (même nom) — aucun changement HTML nécessaire. Clic → realisations.html#<slug>. -->
+  <section class="rea sec--dark" id="realisations" aria-label="Nos réalisations">
+    <div class="wrap rea-head">
+      <p class="eyebrow mono reveal">Nos réalisations</p>
+      <h2 class="rea-title reveal" data-d="1">Des maisons transformées,<br><em>partout au Luxembourg.</em></h2>
+      <p class="rea-intro reveal" data-d="2">Extensions, rénovations complètes et aménagements de combles livrés clé en main. Survolez pour mettre en pause — chaque projet ouvre son étude de cas.</p>
     </div>
-  </section>
 
-  <!-- ===== ENGAGEMENTS ===== -->
-  <section class="engage sec--dark2">
-    <div class="wrap">
-      <p class="eyebrow mono reveal">Pourquoi Terrexo</p>
-      <h2 class="sec-title reveal" data-d="1">Un seul interlocuteur,<br><em>du potentiel à la livraison.</em></h2>
-      <div class="engage-grid">
-        <div class="engage-item reveal" data-d="1"><span class="engage-k">2018</span><span class="engage-l">Année de création</span></div>
-        <div class="engage-item reveal" data-d="2"><span class="engage-k">Beggen</span><span class="engage-l">Atelier au Luxembourg</span></div>
-        <div class="engage-item reveal" data-d="3"><span class="engage-k">A → Z</span><span class="engage-l">Maître d'œuvre unique</span></div>
-        <div class="engage-item reveal" data-d="4"><span class="engage-k">0 €</span><span class="engage-l">Étude &amp; devis offerts</span></div>
+    <div class="rea-marquee reveal" data-d="3">
+      <div class="rea-track">
+        <a class="rcard" href="realisations.html#renovation-bridel">
+          <span class="rcard-media"><img src="assets/img/realisations/renovation-bridel.webp" alt="Rénovation d'exception — Bridel" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Rénovation · 2024</span><span class="rcard-name">Bridel</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#extension-belair">
+          <span class="rcard-media"><img src="assets/img/realisations/extension-belair.webp" alt="Extension &amp; Rénovation — Bélair" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Extension · 2025</span><span class="rcard-name">Bélair</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#extension-hamm">
+          <span class="rcard-media"><img src="assets/img/realisations/extension-hamm.webp" alt="Reconstruction complète — Hamm" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Extension · 2025</span><span class="rcard-name">Hamm</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#extension-rollingergrund">
+          <span class="rcard-media"><img src="assets/img/realisations/extension-rollingergrund.webp" alt="Extension résidentielle — Rollingergrund" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Extension · 2026</span><span class="rcard-name">Rollingergrund</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#extension-weiller">
+          <span class="rcard-media"><img src="assets/img/realisations/extension-weiller.webp" alt="Extension maçonnerie — Weiler-la-Tour" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Extension · 2024</span><span class="rcard-name">Weiler-la-Tour</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#extension-bettembourg">
+          <span class="rcard-media"><img src="assets/img/realisations/extension-bettembourg.webp" alt="Extension bois — Bettembourg" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Extension · 2022</span><span class="rcard-name">Bettembourg</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#renovation-gasperich">
+          <span class="rcard-media"><img src="assets/img/realisations/renovation-gasperich.webp" alt="Rénovation élégante — Gasperich" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Rénovation · 2022</span><span class="rcard-name">Gasperich</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#amenagement-combles-peppange">
+          <span class="rcard-media"><img src="assets/img/realisations/amenagement-combles-peppange.webp" alt="Aménagement de combles — Peppange" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Combles · 2023</span><span class="rcard-name">Peppange</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#amenagement-combles-dalheim">
+          <span class="rcard-media"><img src="assets/img/realisations/amenagement-combles-dalheim.webp" alt="Mansarde avec mezzanine — Dalheim" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Combles · 2024</span><span class="rcard-name">Dalheim</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#renovation-walferdange">
+          <span class="rcard-media"><img src="assets/img/realisations/renovation-walferdange.webp" alt="Transformation Airbnb — Walferdange" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Rénovation · 2025</span><span class="rcard-name">Walferdange</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#appartement-limpertsberg">
+          <span class="rcard-media"><img src="assets/img/realisations/appartement-limpertsberg.webp" alt="Rénovation appartement — Limpertsberg" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Rénovation · 2024</span><span class="rcard-name">Limpertsberg</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#renovation-sandweiller">
+          <span class="rcard-media"><img src="assets/img/realisations/renovation-sandweiller.webp" alt="Rénovation maison unifamiliale — Sandweiller" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Rénovation · 2022</span><span class="rcard-name">Sandweiller</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#extension-bonnevoie">
+          <span class="rcard-media"><img src="assets/img/realisations/extension-bonnevoie.webp" alt="Extension bois 2 niveaux — Bonnevoie" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Extension · 2024</span><span class="rcard-name">Bonnevoie</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#extension-limpertsberg">
+          <span class="rcard-media"><img src="assets/img/realisations/extension-limpertsberg.webp" alt="Extension — Limpertsberg" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Extension · 2023</span><span class="rcard-name">Limpertsberg</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#renovation-merl">
+          <span class="rcard-media"><img src="assets/img/realisations/renovation-merl.webp" alt="Rénovation complète — Merl" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Rénovation · 2024</span><span class="rcard-name">Merl</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#renovation-bridel" aria-hidden="true" tabindex="-1">
+          <span class="rcard-media"><img src="assets/img/realisations/renovation-bridel.webp" alt="Rénovation d'exception — Bridel" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Rénovation · 2024</span><span class="rcard-name">Bridel</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#extension-belair" aria-hidden="true" tabindex="-1">
+          <span class="rcard-media"><img src="assets/img/realisations/extension-belair.webp" alt="Extension &amp; Rénovation — Bélair" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Extension · 2025</span><span class="rcard-name">Bélair</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#extension-hamm" aria-hidden="true" tabindex="-1">
+          <span class="rcard-media"><img src="assets/img/realisations/extension-hamm.webp" alt="Reconstruction complète — Hamm" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Extension · 2025</span><span class="rcard-name">Hamm</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#extension-rollingergrund" aria-hidden="true" tabindex="-1">
+          <span class="rcard-media"><img src="assets/img/realisations/extension-rollingergrund.webp" alt="Extension résidentielle — Rollingergrund" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Extension · 2026</span><span class="rcard-name">Rollingergrund</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#extension-weiller" aria-hidden="true" tabindex="-1">
+          <span class="rcard-media"><img src="assets/img/realisations/extension-weiller.webp" alt="Extension maçonnerie — Weiler-la-Tour" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Extension · 2024</span><span class="rcard-name">Weiler-la-Tour</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#extension-bettembourg" aria-hidden="true" tabindex="-1">
+          <span class="rcard-media"><img src="assets/img/realisations/extension-bettembourg.webp" alt="Extension bois — Bettembourg" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Extension · 2022</span><span class="rcard-name">Bettembourg</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#renovation-gasperich" aria-hidden="true" tabindex="-1">
+          <span class="rcard-media"><img src="assets/img/realisations/renovation-gasperich.webp" alt="Rénovation élégante — Gasperich" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Rénovation · 2022</span><span class="rcard-name">Gasperich</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#amenagement-combles-peppange" aria-hidden="true" tabindex="-1">
+          <span class="rcard-media"><img src="assets/img/realisations/amenagement-combles-peppange.webp" alt="Aménagement de combles — Peppange" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Combles · 2023</span><span class="rcard-name">Peppange</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#amenagement-combles-dalheim" aria-hidden="true" tabindex="-1">
+          <span class="rcard-media"><img src="assets/img/realisations/amenagement-combles-dalheim.webp" alt="Mansarde avec mezzanine — Dalheim" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Combles · 2024</span><span class="rcard-name">Dalheim</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#renovation-walferdange" aria-hidden="true" tabindex="-1">
+          <span class="rcard-media"><img src="assets/img/realisations/renovation-walferdange.webp" alt="Transformation Airbnb — Walferdange" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Rénovation · 2025</span><span class="rcard-name">Walferdange</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#appartement-limpertsberg" aria-hidden="true" tabindex="-1">
+          <span class="rcard-media"><img src="assets/img/realisations/appartement-limpertsberg.webp" alt="Rénovation appartement — Limpertsberg" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Rénovation · 2024</span><span class="rcard-name">Limpertsberg</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#renovation-sandweiller" aria-hidden="true" tabindex="-1">
+          <span class="rcard-media"><img src="assets/img/realisations/renovation-sandweiller.webp" alt="Rénovation maison unifamiliale — Sandweiller" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Rénovation · 2022</span><span class="rcard-name">Sandweiller</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#extension-bonnevoie" aria-hidden="true" tabindex="-1">
+          <span class="rcard-media"><img src="assets/img/realisations/extension-bonnevoie.webp" alt="Extension bois 2 niveaux — Bonnevoie" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Extension · 2024</span><span class="rcard-name">Bonnevoie</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#extension-limpertsberg" aria-hidden="true" tabindex="-1">
+          <span class="rcard-media"><img src="assets/img/realisations/extension-limpertsberg.webp" alt="Extension — Limpertsberg" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Extension · 2023</span><span class="rcard-name">Limpertsberg</span></span>
+        </a>
+        <a class="rcard" href="realisations.html#renovation-merl" aria-hidden="true" tabindex="-1">
+          <span class="rcard-media"><img src="assets/img/realisations/renovation-merl.webp" alt="Rénovation complète — Merl" loading="lazy" decoding="async"></span>
+          <span class="rcard-info"><span class="rcard-cat mono">Rénovation · 2024</span><span class="rcard-name">Merl</span></span>
+        </a>
       </div>
+    </div>
+
+    <div class="wrap rea-foot reveal">
+      <a class="btn-gold" href="realisations.html">Voir toutes nos réalisations <span aria-hidden="true">&#8594;</span></a>
     </div>
   </section>
 
   <!-- ===== RÉALISATIONS / AVANT-APRÈS ===== -->
-  <section class="realis" id="realisations">
+  <section class="realis" id="transformation">
     <div class="wrap">
       <p class="eyebrow mono reveal">La transformation</p>
       <h2 class="sec-title reveal" data-d="1">D'une maison traditionnelle<br><em>à une résidence d'exception.</em></h2>
@@ -258,7 +409,8 @@
     <nav class="ft-nav" aria-label="Sections">
       <a href="#expertise">Expertise</a>
       <a href="#approche">Méthode</a>
-      <a href="#realisations">Transformation</a>
+      <a href="#realisations">Réalisations</a>
+      <a href="#transformation">Transformation</a>
       <a href="#faq">FAQ</a>
       <a href="#contact">Contact</a>
       <a href="tel:+352691591951">+352 691 591 951</a>
