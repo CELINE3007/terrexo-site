@@ -74,66 +74,102 @@
   var film  = document.getElementById('film');
   if (!film) { headerLight(); window.addEventListener('scroll', headerLight, {passive:true}); return; }
 
-  var pin   = film.querySelector('.film-pin');
-  var video = film.querySelector('.film-video');
-  var caps  = Array.prototype.slice.call(film.querySelectorAll('.film-cap'));
-  var bar   = film.querySelector('.film-bar');
-  var hint  = film.querySelector('.film-hint');
-  var prog  = film.querySelector('.cine-prog');
+  var pin    = film.querySelector('.film-pin');
+  var canvas = film.querySelector('.film-canvas');
+  var caps   = Array.prototype.slice.call(film.querySelectorAll('.film-cap'));
+  var bar    = film.querySelector('.film-bar');
+  var hint   = film.querySelector('.film-hint');
+  var prog   = film.querySelector('.cine-prog');
+  var ctx    = canvas ? canvas.getContext('2d') : null;
 
   var NC = caps.length;          // nombre de légendes (réparties sur 0..1)
   var SCROLL_VH = 6.5;           // course de scroll (en hauteurs d'écran)
   var vh = window.innerHeight;
 
-  var dur = 0;                   // durée de la vidéo (s)
   var P = 0;                     // progression du scroll 0..1
-  var targetT = 0;               // temps cible piloté par le scroll
-  var curT = 0;                  // temps courant lissé
-  var ready = false;
+  var targetF = 0;               // image cible pilotée par le scroll
+  var curF = 0;                  // image courante lissée
   var running = false;
   var dots = [];
-  var FPS = 12;                  // cadence du film (all-intra) : 1 image = 1/FPS s
-  var lastSeekT = -1;            // dernière image réellement demandée (anti-doublon)
 
-  /* ---------- Amorçage de la vidéo ----------
-     On charge le fichier entier en Blob puis on l'attribue via une URL objet.
-     Le navigateur dispose alors de tous les octets en local : le scrub
-     (seek) fonctionne dans TOUS les navigateurs, même quand le serveur
-     ne répond pas aux requêtes Range (cas de Cloudflare Pages -> Safari /
-     Firefox refusaient de chercher dans la vidéo). Repli : src direct. */
-  function onMeta(){
-    dur = (video.duration && isFinite(video.duration)) ? video.duration : 36;
-    ready = true;
-  }
-  function primeDecode(){
-    // play->pause muet : force le 1er décodage (peinture de l'image)
-    var pr = video.play && video.play();
-    if (pr && pr.then) pr.then(function(){ try{ video.pause(); }catch(e){} }).catch(function(){});
-  }
-  function attachSrc(src){
-    if (video.readyState >= 1) onMeta();
-    video.addEventListener('loadedmetadata', onMeta);
-    video.src = src;
-    video.load();
-    primeDecode();
-  }
-  if (video){
-    var srcUrl = video.getAttribute('data-src') || video.getAttribute('src');
-    var useBlob = ('fetch' in window) && ('URL' in window) && URL.createObjectURL;
-    if (useBlob && srcUrl){
-      fetch(srcUrl)
-        .then(function(r){ if(!r.ok) throw new Error('http '+r.status); return r.blob(); })
-        .then(function(blob){ attachSrc(URL.createObjectURL(blob)); })
-        .catch(function(){ attachSrc(srcUrl); }); // repli : lecture directe
-    } else if (srcUrl){
-      attachSrc(srcUrl);
+  /* ============================================================
+     SÉQUENCE D'IMAGES (technique Apple/AirPods) :
+     on précharge des frames HD (.webp) et on les DESSINE sur un
+     <canvas> au scroll. Aucun décodage vidéo => aucun à-coup, et
+     la qualité HD source est conservée (rendu net à tout DPR).
+     ============================================================ */
+  var FRAMES   = 180;            // nombre de frames extraites par dossier (20 × 9 morphes)
+  var mobile   = window.matchMedia('(max-width:760px)').matches;
+  var basePath = 'assets/img/film/' + (mobile ? 'm' : 'd') + '/';
+  // cadrage : desktop = cover recadré vers le haut (44%) ; mobile = contain
+  var FIT      = mobile ? 'contain' : 'cover';
+  var FOCUS_Y  = 0.44;
+  var imgs   = new Array(FRAMES);
+  var loaded = 0;
+  var ready  = false;
+  var firstDrawn = false;
+  var natW = 0, natH = 0;        // dimensions natives d'une frame
+
+  function pad4(n){ n = String(n); while (n.length < 4) n = '0' + n; return n; }
+
+  function preload(){
+    for (var i = 0; i < FRAMES; i++){
+      (function(idx){
+        var im = new Image();
+        im.decoding = 'async';
+        im.onload = function(){
+          loaded++;
+          if (!natW){ natW = im.naturalWidth; natH = im.naturalHeight; }
+          if (idx === 0){ ready = true; draw(0); }            // 1re frame prête : on peut afficher
+        };
+        im.onerror = function(){ loaded++; };
+        im.src = basePath + pad4(idx + 1) + '.webp';
+        imgs[idx] = im;
+      })(i);
     }
   }
+
+  /* ---------- Canvas : taille physique = CSS * DPR (plafonné à 2) ---------- */
+  function sizeCanvas(){
+    if (!canvas) return;
+    var r = canvas.getBoundingClientRect();
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = Math.max(1, Math.round(r.width  * dpr));
+    var h = Math.max(1, Math.round(r.height * dpr));
+    if (canvas.width !== w || canvas.height !== h){
+      canvas.width = w; canvas.height = h;
+    }
+  }
+
+  /* ---------- Dessin d'une frame avec cadrage cover/contain ---------- */
+  function draw(f){
+    if (!ctx || !ready) return;
+    var idx = Math.max(0, Math.min(FRAMES - 1, Math.round(f)));
+    var im = imgs[idx];
+    if (!im || !im.complete || !im.naturalWidth) return;
+    var cw = canvas.width, ch = canvas.height;
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';   // redimensionnement HD net (sinon "low" par défaut)
+    var iw = im.naturalWidth, ih = im.naturalHeight;
+    var scale = (FIT === 'cover')
+      ? Math.max(cw / iw, ch / ih)
+      : Math.min(cw / iw, ch / ih);
+    var dw = iw * scale, dh = ih * scale;
+    var dx = (cw - dw) / 2;
+    var dy = (FIT === 'cover') ? (ch - dh) * FOCUS_Y : (ch - dh) / 2;
+    if (FIT === 'contain'){ ctx.fillStyle = '#05060a'; ctx.fillRect(0, 0, cw, ch); }
+    ctx.drawImage(im, dx, dy, dw, dh);
+    if (!firstDrawn){ firstDrawn = true; canvas.classList.add('is-drawn'); }
+  }
+
+  preload();
 
   /* ---------- Mise en page : hauteur de la section = course de scroll ---------- */
   function layout(){
     vh = window.innerHeight;
     film.style.height = Math.round(vh * (1 + SCROLL_VH)) + 'px';
+    sizeCanvas();
+    draw(curF);
   }
 
   function computeP(){
@@ -166,23 +202,14 @@
     if (act !== curDot){ curDot = act; dots.forEach(function (d, k){ d.classList.toggle('on', k === act); }); }
   }
 
-  /* ---------- Boucle d'easing : lisse curT -> targetT (clé de la fluidité) ---------- */
+  /* ---------- Boucle d'easing : lisse curF -> targetF (clé de la fluidité) ---------- */
+  var lastDrawn = -1;
   function tick(){
-    // on ne laisse jamais la vidéo se lire seule : seul le scroll pilote le temps
-    if (video && !video.paused){ try { video.pause(); } catch (e){} }
-    var diff = targetT - curT;
-    curT += diff * 0.16;
-    if (Math.abs(diff) < 0.004){ curT = targetT; running = false; }
-    // On ne demande QUE le décodage d'une nouvelle image : curT est quantifié
-    // sur la grille d'images (1/FPS). Comme le film est all-intra, chaque seek
-    // ne décode qu'une seule image -> scrub léger, même sur petit processeur.
-    if (ready && video){
-      var frameT = Math.round(curT * FPS) / FPS;
-      if (frameT !== lastSeekT){
-        lastSeekT = frameT;
-        try { video.currentTime = frameT; } catch (e){}
-      }
-    }
+    var diff = targetF - curF;
+    curF += diff * 0.18;
+    if (Math.abs(diff) < 0.05){ curF = targetF; running = false; }
+    var idx = Math.round(curF);
+    if (idx !== lastDrawn){ lastDrawn = idx; draw(idx); }   // on ne redessine que si l'image change
     if (running) requestAnimationFrame(tick);
   }
   function ensureRunning(){ if (!running){ running = true; requestAnimationFrame(tick); } }
@@ -190,7 +217,7 @@
   /* ---------- Rendu sur scroll ---------- */
   function render(){
     P = computeP();
-    targetT = P * ((dur || 36) - 0.05);
+    targetF = P * (FRAMES - 1);
     if (bar)  bar.style.width = (P * 100).toFixed(2) + '%';
     if (hint) hint.style.opacity = P > 0.02 ? '0' : '1';
     paintCaps();
@@ -226,7 +253,6 @@
   function buildStatic(){
     docEl.classList.add('is-static');
     film.style.height = 'auto';
-    if (video){ video.setAttribute('controls', ''); video.muted = true; }
     caps.forEach(function (c, i){
       c.style.opacity = (i === 0) ? '1' : '0';
       c.style.transform = 'none';

@@ -42,11 +42,18 @@
   animation:gridDrift 26s linear infinite;}
 @keyframes gridDrift{0%{background-position:0 0,0 0;}100%{background-position:0 66px,66px 0;}}
 
-/* --- Film continu : une seule vidéo plein cadre --- */
-.film-stage{position:absolute;inset:0;z-index:2;}
-.film-video{position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;object-position:center 44%;background:#05060a;
-  backface-visibility:hidden;}
+/* --- Film continu : séquence d'images HD dessinée sur canvas --- */
+.film-stage{position:absolute;inset:0;z-index:2;background:#05060a;}
+/* Le canvas couvre tout le cadre ; le cadrage (cover/contain + 44%) est
+   géré en JS dans drawImage pour préserver la netteté HD à tout DPR. */
+.film-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;
+  background:#05060a;backface-visibility:hidden;}
+/* Image de repli (poster) sous le canvas : visible sans JS / pendant le
+   préchargement, masquée dès que le canvas dessine la 1re frame. */
+.film-fallback{position:absolute;inset:0;width:100%;height:100%;z-index:1;
+  object-fit:cover;object-position:center 44%;background:#05060a;}
+.film-canvas.is-drawn + .film-fallback,
+.film-canvas.is-drawn ~ .film-fallback{display:none;}
 
 /* Voile pour la lisibilité du texte */
 .film-veil{position:absolute;inset:0;z-index:3;pointer-events:none;
@@ -85,8 +92,9 @@
 
 @media (max-width:760px){
   /* portrait : on montre le cadre entier, maison parfaitement centrée
-     (le fond néon habille les bandes) plutôt que de recadrer agressivement */
-  .film-video{object-fit:contain;object-position:center center;}
+     (le fond néon habille les bandes) plutôt que de recadrer agressivement.
+     Le canvas reproduit ce "contain" en JS ; le poster suit la même règle. */
+  .film-fallback{object-fit:contain;object-position:center center;}
   .cine-prog{display:none;}
 }
 
@@ -95,7 +103,8 @@
    En l'absence de JS, on dépile aussi proprement.            */
 .is-static .film-pin{position:static;height:auto;}
 .is-static .film-stage{position:relative;height:auto;}
-.is-static .film-video{position:relative;height:auto;aspect-ratio:1280/742;object-fit:contain;}
+.is-static .film-canvas{display:none;}
+.is-static .film-fallback{position:relative;height:auto;aspect-ratio:1764/1176;object-fit:contain;}
 .is-static .film-veil{display:none;}
 .is-static .film-bar,.is-static .film-hint{display:none;}
 .is-static .film-caps{position:static;}
@@ -104,7 +113,8 @@
 html:not(.js) .film{height:auto!important;}
 html:not(.js) .film-pin{position:static;height:auto;}
 html:not(.js) .film-stage{position:relative;}
-html:not(.js) .film-video{position:relative;height:auto;aspect-ratio:1280/742;object-fit:contain;}
+html:not(.js) .film-canvas{display:none;}
+html:not(.js) .film-fallback{position:relative;height:auto;aspect-ratio:1764/1176;object-fit:contain;}
 html:not(.js) .film-bg{position:absolute;}
 html:not(.js) .film-veil{display:none;}
 html:not(.js) .film-cap{opacity:1;}

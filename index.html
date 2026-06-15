@@ -85,12 +85,12 @@
     <div class="film-pin">
       <div class="film-bg" aria-hidden="true"><div class="film-grid"></div></div>
 
-      <!-- Film continu unique : un seul décodeur, scrub fluide.
-           Chargé en Blob par JS (data-src) pour un scrub fiable même quand
-           le serveur ne gère pas les requêtes Range (Safari/Firefox). -->
+      <!-- Séquence d'images HD dessinée sur canvas (technique Apple/AirPods) :
+           zéro décodage vidéo → scrub fluide même sur Intel, qualité HD préservée.
+           Les frames sont préchargées par JS depuis assets/img/film/{d|m}/. -->
       <div class="film-stage">
-        <video class="film-video" data-src="assets/video/film.mp4" poster="assets/img/posters/film.webp"
-               muted playsinline preload="none" disablepictureinpicture></video>
+        <canvas class="film-canvas" aria-hidden="true"></canvas>
+        <img class="film-fallback" src="assets/img/posters/film.webp" alt="" aria-hidden="true">
       </div>
 
       <div class="film-veil" aria-hidden="true"></div>
