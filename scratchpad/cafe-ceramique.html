@@ -1,0 +1,292 @@
+<title>The Clay Edit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --ground:#F6F0E7; --surface:#FFFDF9; --surface-2:#EFE7DA;
+    --ink:#31261D; --muted:#7A6C5B; --faint:#A2937E;
+    --line:#E6DBCA; --line-strong:#D6C7B0;
+    --clay:#A85A38; --clay-2:#C47A54; --clay-wash:#F2E2D6;
+    --celadon:#6E8A7E; --celadon-wash:#E4EAE3;
+    --glaze:#4F7180;
+    --shadow:0 1px 2px rgba(49,38,29,.04),0 10px 32px -16px rgba(49,38,29,.22);
+    --radius:14px;
+  }
+  :root:not([data-theme="light"]){ @media (prefers-color-scheme:dark){
+    --ground:#211A14; --surface:#2A221A; --surface-2:#332A20;
+    --ink:#F1E7D8; --muted:#AC9C86; --faint:#7F7160;
+    --line:#3C3227; --line-strong:#4C4032;
+    --clay:#D2825C; --clay-2:#E09A72; --clay-wash:#3A2A1F;
+    --celadon:#9DB3A6; --celadon-wash:#28322C;
+    --glaze:#8AAAB8;
+    --shadow:0 1px 2px rgba(0,0,0,.35),0 12px 34px -16px rgba(0,0,0,.6);
+  }}
+  :root[data-theme="dark"]{
+    --ground:#211A14; --surface:#2A221A; --surface-2:#332A20;
+    --ink:#F1E7D8; --muted:#AC9C86; --faint:#7F7160;
+    --line:#3C3227; --line-strong:#4C4032;
+    --clay:#D2825C; --clay-2:#E09A72; --clay-wash:#3A2A1F;
+    --celadon:#9DB3A6; --celadon-wash:#28322C;
+    --glaze:#8AAAB8;
+    --shadow:0 1px 2px rgba(0,0,0,.35),0 12px 34px -16px rgba(0,0,0,.6);
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--ground); color:var(--ink);
+    font-family:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+    font-size:17px; line-height:1.65; letter-spacing:-.003em; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px; margin:0 auto; padding:0 24px}
+  .prose{max-width:660px}
+  h1,h2,h3{font-family:"Spectral",Georgia,serif; font-weight:500; text-wrap:balance; line-height:1.14}
+  p{text-wrap:pretty}
+  a{color:var(--clay)}
+
+  .eyebrow{font-size:12.5px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--clay); display:flex; align-items:center; gap:12px; margin:0 0 18px}
+  .eyebrow::before{content:""; width:26px; height:1px; background:var(--clay); flex:none}
+
+  .topbar{position:sticky; top:0; z-index:20; backdrop-filter:blur(8px); background:color-mix(in srgb,var(--ground) 82%,transparent); border-bottom:1px solid var(--line)}
+  .topbar .wrap{display:flex; align-items:center; justify-content:space-between; height:58px}
+  .brandmark{font-family:"Spectral",serif; font-weight:600; font-size:16px; letter-spacing:.01em}
+  .brandmark em{font-style:italic; color:var(--clay)}
+  .toggle{font:inherit; font-size:13px; font-weight:600; color:var(--muted); background:var(--surface); border:1px solid var(--line-strong); border-radius:999px; padding:7px 14px; cursor:pointer; display:flex; align-items:center; gap:7px}
+  .toggle:hover{color:var(--ink); border-color:var(--clay)}
+  .toggle:focus-visible{outline:2px solid var(--clay); outline-offset:2px}
+
+  .hero{padding:74px 0 58px; border-bottom:1px solid var(--line)}
+  .hero .kicker{font-size:13px; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--celadon); margin:0 0 22px}
+  .hero h1{font-size:clamp(42px,8vw,82px); margin:0; letter-spacing:-.02em}
+  .hero h1 em{font-style:italic; color:var(--clay)}
+  .tagline{font-family:"Spectral",serif; font-style:italic; font-size:clamp(20px,3.2vw,26px); color:var(--muted); margin:24px 0 0; max-width:560px}
+  .lede{font-size:19px; max-width:600px; margin:28px 0 0}
+  .facts{display:flex; flex-wrap:wrap; gap:10px; margin:32px 0 0}
+  .fact{background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:8px 16px; font-size:13.5px; font-weight:500; color:var(--muted); display:flex; align-items:center; gap:8px}
+  .fact b{color:var(--ink); font-weight:600}
+  .dot{width:6px; height:6px; border-radius:50%; background:var(--clay); flex:none}
+
+  section{padding:62px 0; border-bottom:1px solid var(--line)}
+  section h2{font-size:clamp(28px,5vw,40px); margin:0 0 8px; letter-spacing:-.015em}
+  .sub{color:var(--muted); font-size:18px; margin:0 0 34px; max-width:620px}
+  section p{margin:0 0 18px}
+  section .prose p:last-child{margin-bottom:0}
+  strong{font-weight:600}
+
+  .callout{background:var(--celadon-wash); border:1px solid color-mix(in srgb,var(--celadon) 34%,transparent); border-radius:var(--radius); padding:22px 24px; margin:26px 0; font-size:16px}
+  .callout .lbl{font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--celadon); margin:0 0 8px}
+  .callout p{margin:0}
+  .callout.clay{background:var(--clay-wash); border-color:color-mix(in srgb,var(--clay) 34%,transparent)}
+  .callout.clay .lbl{color:var(--clay)}
+
+  .grid{display:grid; gap:16px}
+  .grid.two{grid-template-columns:repeat(2,1fr)}
+  .grid.three{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:680px){.grid.two,.grid.three{grid-template-columns:1fr}}
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow)}
+  .card .tag{font-size:11.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--celadon); margin:0 0 10px; display:block}
+  .card h3{font-size:19px; margin:0 0 6px}
+  .card p{font-size:14.5px; color:var(--muted); margin:0}
+
+  .stream{display:flex; gap:18px; align-items:flex-start; padding:20px 0; border-top:1px solid var(--line)}
+  .stream:first-child{border-top:0}
+  .stream .n{font-family:"Spectral",serif; font-size:24px; color:var(--clay); line-height:1; width:40px; flex:none; padding-top:2px}
+  .stream h3{font-size:18px; margin:0 0 4px}
+  .stream p{font-size:15px; color:var(--muted); margin:0}
+  .stream .pill{font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--celadon); background:var(--celadon-wash); padding:3px 9px; border-radius:999px; margin-left:8px; vertical-align:2px}
+
+  .tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); background:var(--surface); box-shadow:var(--shadow)}
+  table{width:100%; border-collapse:collapse; font-size:15px; min-width:460px}
+  th,td{text-align:left; padding:12px 20px; border-top:1px solid var(--line)}
+  thead th{border-top:0; font-size:12px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); background:var(--surface-2)}
+  td.r,th.r{text-align:right; font-variant-numeric:tabular-nums}
+  tbody tr:hover{background:var(--clay-wash)}
+  .total td{border-top:2px solid var(--line-strong); font-weight:700; background:var(--surface-2)}
+  .big td{font-size:16px}
+  .pos{color:var(--celadon); font-weight:700}
+  .accent{color:var(--clay); font-weight:700}
+
+  .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:8px 0 30px}
+  @media(max-width:680px){.stats{grid-template-columns:1fr}}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:22px 20px}
+  .stat .k{font-family:"Spectral",serif; font-size:32px; color:var(--clay); line-height:1; font-variant-numeric:tabular-nums}
+  .stat .k.cel{color:var(--celadon)}
+  .stat .l{font-size:13.5px; color:var(--muted); margin-top:8px}
+
+  .phase{display:grid; grid-template-columns:130px 1fr; gap:24px; padding:22px 0; border-top:1px solid var(--line)}
+  .phase:first-child{border-top:0}
+  @media(max-width:680px){.phase{grid-template-columns:1fr; gap:6px}}
+  .phase .when{font-family:"Spectral",serif; font-size:16px; color:var(--clay); font-weight:600}
+  .phase h3{font-size:17px; margin:0 0 6px}
+  .phase p{font-size:15px; color:var(--muted); margin:0}
+
+  footer{padding:48px 0 68px; color:var(--faint); font-size:13.5px}
+  footer .prose{max-width:640px}
+  footer p{margin:0 0 10px}
+  .note{font-size:13.5px; color:var(--faint); font-style:italic; margin-top:16px}
+</style>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="brandmark">The <em>Clay</em> Edit</div>
+    <button class="toggle" id="tg" aria-label="Changer le thème">☾ Thème</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">Concept &amp; budget prévisionnel · Luxembourg-Ville</p>
+    <h1>The <em>Clay</em> Edit</h1>
+    <p class="tagline">Un café où l'on repart avec quelque chose qu'on a créé de ses mains.</p>
+    <p class="lede">Un café-atelier céramique : on choisit une pièce en biscuit, on la peint autour d'un latte, l'équipe la cuit — et on revient la chercher, unique, quelques jours plus tard.</p>
+    <div class="facts">
+      <span class="fact"><span class="dot"></span> Modèle <b>paint-your-own-pottery</b> + café</span>
+      <span class="fact"><span class="dot"></span> <b>Luxembourg-Ville</b></span>
+      <span class="fact"><span class="dot"></span> Étape 2 après <b>The Woman Edit</b></span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap prose">
+    <p class="eyebrow">01 — Le concept</p>
+    <h2>Le café qu'on ne fait pas que consommer — on y fabrique.</h2>
+    <p class="sub">Le nom de travail « The Clay Edit » n'est pas un hasard : c'est le même univers de marque que The Woman Edit. Même fondatrice, même promesse — prendre soin de soi, créer, appartenir — déclinée dans un lieu.</p>
+
+    <p>Le modèle le plus rentable et le plus accessible du café céramique, c'est le <strong>« paint-your-own-pottery »</strong> : les clientes choisissent une pièce déjà façonnée (biscuit), la peignent sur place autour d'un café ou d'un matcha, et l'équipe se charge de l'émaillage et de la cuisson. Pas besoin d'être artiste, pas de tour à maîtriser — <strong>tout le monde repart avec un objet unique</strong>. C'est ce qui rend le concept large, festif et hautement instagrammable.</p>
+
+    <p>À Luxembourg-Ville, ce type de lieu <strong>n'existe quasiment pas</strong>, alors que la demande — activités créatives, «&nbsp;slow&nbsp;», entre amies, en famille, en team-building corporate — est forte et solvable. Tu arrives sur un créneau vide, avec un pouvoir d'achat qui te permet un positionnement soigné.</p>
+
+    <div class="callout">
+      <p class="lbl">La synergie qui dé-risque tout</p>
+      <p>Le café devient le <strong>lieu maison de The Woman Edit</strong>. « Ceramics &amp; Brunch » se tient chez toi, plus besoin de louer une salle. Ta communauté d'Edit Girls devient ta première clientèle. Et inversement, chaque événement remplit le café en semaine creuse. Les deux projets se nourrissent l'un l'autre.</p>
+    </div>
+
+    <p class="note">Autres noms possibles si tu veux détacher le café de la marque événementielle : « Terre &amp; Latte », « Kaolin », « Atelier Bisque », « The Clay Room ».</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">02 — Sources de revenus</p>
+    <h2 style="max-width:660px">Six robinets, pas un seul.</h2>
+    <p class="sub">Un café céramique bien pensé ne vit pas que du café. La force du modèle, c'est d'empiler des revenus à forte marge sur une même surface.</p>
+    <div class="prose" style="max-width:720px">
+      <div class="stream"><div class="n">01</div><div><h3>Peinture sur céramique <span class="pill">cœur</span></h3><p>Prix de la pièce (12–45&nbsp;€) + frais d'atelier par personne (peinture, cuisson, émaillage inclus). Panier moyen ≈ 40&nbsp;€. Forte marge, la matière première coûte peu.</p></div></div>
+      <div class="stream"><div class="n">02</div><div><h3>Café &amp; brunch</h3><p>Cafés de spécialité, matcha, pâtisseries, brunch le week-end. Panier ≈ 13&nbsp;€. Fait revenir les gens même sans peindre, et fait vivre les heures creuses.</p></div></div>
+      <div class="stream"><div class="n">03</div><div><h3>Groupes &amp; événements privés <span class="pill">grosse marge</span></h3><p>Anniversaires, EVJF, baby showers, team-building d'entreprise. Réservations à l'avance, panier élevé, remplissent les soirs et lundis. Le vrai moteur de rentabilité.</p></div></div>
+      <div class="stream"><div class="n">04</div><div><h3>Cours &amp; masterclass</h3><p>Initiation au tour, séries de cours, ateliers thématiques. Premium (60–90&nbsp;€/séance), fidélise et positionne le lieu comme référence créative.</p></div></div>
+      <div class="stream"><div class="n">05</div><div><h3>The Woman Edit sur place <span class="pill">synergie</span></h3><p>Tes événements premium hébergés chez toi : zéro location de salle, marge maximale, et ils amènent au café une clientèle qualifiée qui revient.</p></div></div>
+      <div class="stream"><div class="n">06</div><div><h3>Boutique &amp; cartes cadeaux</h3><p>Pièces finies à vendre, kits à emporter, cartes cadeaux (trésorerie encaissée d'avance). Idéal autour de Noël et de la fête des mères.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">03 — Budget d'ouverture</p>
+    <h2>Ce qu'il faut pour ouvrir les portes.</h2>
+    <p class="sub">Estimation pour un local d'environ 110 m² à Luxembourg-Ville. Deux niveaux : « lean » (petite surface, occasion, un seul four) et « standard » (installation confortable et pérenne). Chiffres indicatifs, à confirmer avec de vrais devis.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Poste d'investissement</th><th class="r">Lean</th><th class="r">Standard</th></tr></thead>
+        <tbody>
+          <tr><td>Dépôt de garantie (3 mois de loyer)</td><td class="r">7 500 €</td><td class="r">10 500 €</td></tr>
+          <tr><td>Travaux &amp; aménagement (atelier, cuisine, plomberie)</td><td class="r">25 000 €</td><td class="r">50 000 €</td></tr>
+          <tr><td>Fours céramique + installation électrique</td><td class="r">7 000 €</td><td class="r">13 000 €</td></tr>
+          <tr><td>Stock initial : biscuit, émaux, pinceaux, outils</td><td class="r">4 000 €</td><td class="r">7 000 €</td></tr>
+          <tr><td>Équipement café (machine pro, frigo, lave-vaisselle)</td><td class="r">12 000 €</td><td class="r">22 000 €</td></tr>
+          <tr><td>Mobilier &amp; décoration</td><td class="r">7 000 €</td><td class="r">13 000 €</td></tr>
+          <tr><td>Caisse, logiciel de résa, signalétique</td><td class="r">3 000 €</td><td class="r">5 000 €</td></tr>
+          <tr><td>Frais légaux, architecte, autorisations</td><td class="r">5 000 €</td><td class="r">9 000 €</td></tr>
+          <tr><td>Branding, site web, marketing d'ouverture</td><td class="r">4 000 €</td><td class="r">7 000 €</td></tr>
+          <tr><td>Stock alimentaire de départ</td><td class="r">2 000 €</td><td class="r">3 500 €</td></tr>
+          <tr class="total"><td>Sous-total investissement</td><td class="r">76 500 €</td><td class="r">140 000 €</td></tr>
+          <tr><td>Fonds de roulement (trésorerie 3–6 mois de charges)</td><td class="r">25 000 €</td><td class="r">45 000 €</td></tr>
+          <tr class="total big"><td>Total pour ouvrir</td><td class="r"><span class="accent">≈ 101 500 €</span></td><td class="r"><span class="accent">≈ 185 000 €</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Le poste le plus variable à Luxembourg est le <b>local</b> : un pas-de-porte (droit au bail) peut s'ajouter selon l'emplacement. Vise un quartier vivant mais pas l'hyper-prime — la clientèle vient exprès pour l'activité, pas par hasard.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">04 — Charges &amp; rentabilité</p>
+    <h2>Ce que ça coûte à faire tourner, chaque mois.</h2>
+    <p class="sub">Les charges fixes mensuelles, puis le point mort — le chiffre d'affaires à atteindre pour couvrir tout ça. Luxembourg a des salaires élevés : c'est ton plus gros poste.</p>
+
+    <div class="tablewrap" style="margin-bottom:30px">
+      <table>
+        <thead><tr><th>Charge fixe mensuelle</th><th class="r">Estimation</th></tr></thead>
+        <tbody>
+          <tr><td>Loyer (110 m², quartier vivant)</td><td class="r">3 500 €</td></tr>
+          <tr><td>Salaires (2 personnes, charges comprises)</td><td class="r">7 000 €</td></tr>
+          <tr><td>Énergie (fours + café — poste élevé)</td><td class="r">1 200 €</td></tr>
+          <tr><td>Assurances, comptabilité, logiciels</td><td class="r">800 €</td></tr>
+          <tr><td>Marketing courant</td><td class="r">500 €</td></tr>
+          <tr class="total"><td>Charges fixes mensuelles</td><td class="r"><span class="accent">≈ 13 000 €</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="k">≈ 25 000 €</div><div class="l">chiffre d'affaires mensuel pour atteindre le point mort</div></div>
+      <div class="stat"><div class="k cel">≈ 40</div><div class="l">clientes / jour en moyenne (peinture + café confondus)</div></div>
+      <div class="stat"><div class="k cel">35–45 k€</div><div class="l">CA mensuel visé pour un vrai confort et te rémunérer</div></div>
+    </div>
+    <p class="note">Hypothèses&nbsp;: marge brute moyenne ≈ 65&nbsp;%, panier peinture ≈ 40&nbsp;€, panier café ≈ 13&nbsp;€. Le point mort se franchit surtout grâce aux <b>groupes et événements privés</b> (paniers élevés réservés à l'avance) — d'où l'importance de les prospecter dès l'ouverture.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">05 — Par quoi commencer</p>
+    <h2>Le chemin qui enlève le mur.</h2>
+    <p class="sub">Tu n'as pas à trouver 150 000 € demain. Tu as à valider, étape par étape, jusqu'à ce que le café devienne l'évidence — financée en partie par ce que tu auras déjà bâti.</p>
+    <div>
+      <div class="phase"><div class="when">Maintenant</div><div><h3>Lancer The Woman Edit</h3><p>Capital quasi nul, revenus immédiats. Tu construis ta communauté, ta marque et ta trésorerie — les trois choses qui rendront le café finançable et sûr.</p></div></div>
+      <div class="phase"><div class="when">Mois 2–3</div><div><h3>Tester « Ceramics &amp; Brunch »</h3><p>Un de tes événements devient le prototype grandeur nature du café, sans loyer ni risque. Tu mesures l'appétence réelle des Luxembourgeoises pour la céramique. C'est ta meilleure étude de marché.</p></div></div>
+      <div class="phase"><div class="when">Mois 3–6</div><div><h3>Chiffrer pour de vrai</h3><p>Devis travaux, recherche de local, business plan bancaire. Tu remplaces les estimations de ce document par tes vrais chiffres, appuyés sur les résultats de tes événements.</p></div></div>
+      <div class="phase"><div class="when">Mois 6–12</div><div><h3>Financer &amp; ouvrir</h3><p>Apport (ta trésorerie d'événements) + prêt bancaire + aides. Ton dossier est solide : une communauté existante, une marque connue, la preuve que tu remplis. La banque ne finance pas une idée — elle finance une traction. Tu l'auras.</p></div></div>
+    </div>
+
+    <div class="callout clay" style="margin-top:28px">
+      <p class="lbl">À retenir</p>
+      <p>Le découragement vient de regarder les 150 000 € comme une seule marche. Ce ne sont pas 150 000 € à trouver seule et d'un coup&nbsp;: c'est un apport que tu construis, un prêt que ta traction justifie, et des aides que le Luxembourg offre aux créatrices d'entreprise. Chaque événement réussi rend le café un peu plus inévitable.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap prose">
+    <p><strong>Notes pratiques — Luxembourg.</strong> Le café relève de l'HORECA&nbsp;: prévois l'autorisation d'établissement, une éventuelle licence débit de boissons, les normes d'hygiène, et l'installation électrique spécifique aux fours (forte puissance). Renseigne-toi aussi sur les aides à la création d'entreprise et les prêts de la Chambre de Commerce / du ministère de l'Économie — plusieurs dispositifs existent pour les nouveaux commerces.</p>
+    <p>Document de travail — <em>The Clay Edit</em>, concept &amp; budget prévisionnel, Luxembourg. Toutes les valeurs sont des ordres de grandeur à confirmer par des devis réels.</p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var root=document.documentElement, btn=document.getElementById('tg');
+    var saved; try{saved=localStorage.getItem('clay-theme')}catch(e){}
+    if(saved){root.setAttribute('data-theme',saved)}
+    function label(){
+      var dark = root.getAttribute('data-theme')==='dark' ||
+        (!root.getAttribute('data-theme') && matchMedia('(prefers-color-scheme:dark)').matches);
+      btn.textContent = dark ? '☀ Thème' : '☾ Thème';
+    }
+    label();
+    btn.addEventListener('click',function(){
+      var cur=root.getAttribute('data-theme');
+      var isDark = cur==='dark' || (!cur && matchMedia('(prefers-color-scheme:dark)').matches);
+      var next = isDark ? 'light':'dark';
+      root.setAttribute('data-theme',next);
+      try{localStorage.setItem('clay-theme',next)}catch(e){}
+      label();
+    });
+  })();
+</script>
