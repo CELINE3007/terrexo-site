@@ -1,0 +1,454 @@
+<title>The Woman Edit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --ground:#FAF6F0; --surface:#FFFFFF; --surface-2:#F3EDE2;
+    --ink:#2A2621; --muted:#736A5D; --faint:#9A9082;
+    --line:#E7DFD1; --line-strong:#D8CDB9;
+    --matcha:#5E6E41; --matcha-2:#7E8C5B; --matcha-wash:#EBEEE1;
+    --clay:#B0755C; --clay-wash:#F4E7DF;
+    --gold:#A5884E;
+    --shadow:0 1px 2px rgba(42,38,33,.04),0 8px 30px -14px rgba(42,38,33,.16);
+    --radius:16px;
+  }
+  :root:not([data-theme="light"]){ @media (prefers-color-scheme:dark){
+    --ground:#1E1C18; --surface:#27241D; --surface-2:#302C24;
+    --ink:#F2ECE0; --muted:#A79E8E; --faint:#7E7669;
+    --line:#3A362D; --line-strong:#4A4539;
+    --matcha:#AEC085; --matcha-2:#8E9C6C; --matcha-wash:#2B3125;
+    --clay:#D69C81; --clay-wash:#33281F;
+    --gold:#C7A968;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 34px -14px rgba(0,0,0,.6);
+  }}
+  :root[data-theme="dark"]{
+    --ground:#1E1C18; --surface:#27241D; --surface-2:#302C24;
+    --ink:#F2ECE0; --muted:#A79E8E; --faint:#7E7669;
+    --line:#3A362D; --line-strong:#4A4539;
+    --matcha:#AEC085; --matcha-2:#8E9C6C; --matcha-wash:#2B3125;
+    --clay:#D69C81; --clay-wash:#33281F;
+    --gold:#C7A968;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 34px -14px rgba(0,0,0,.6);
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--ground); color:var(--ink);
+    font-family:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+    font-size:17px; line-height:1.65; letter-spacing:-.003em;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px; margin:0 auto; padding:0 24px}
+  .prose{max-width:660px}
+  h1,h2,h3{font-family:"Fraunces",Georgia,serif; font-weight:500; text-wrap:balance; line-height:1.12}
+  p{text-wrap:pretty}
+  a{color:var(--matcha)}
+  .num{font-variant-numeric:tabular-nums}
+
+  /* eyebrow */
+  .eyebrow{font-size:12.5px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); display:flex; align-items:center; gap:12px; margin:0 0 18px}
+  .eyebrow::before{content:""; width:26px; height:1px; background:var(--gold); flex:none}
+
+  /* toggle */
+  .topbar{position:sticky; top:0; z-index:20; backdrop-filter:blur(8px); background:color-mix(in srgb,var(--ground) 80%,transparent); border-bottom:1px solid var(--line)}
+  .topbar .wrap{display:flex; align-items:center; justify-content:space-between; height:58px}
+  .brandmark{font-family:"Fraunces",serif; font-weight:600; font-size:16px; letter-spacing:.02em}
+  .brandmark em{font-style:italic; color:var(--matcha)}
+  .toggle{font:inherit; font-size:13px; font-weight:600; color:var(--muted); background:var(--surface); border:1px solid var(--line-strong); border-radius:999px; padding:7px 14px; cursor:pointer; display:flex; align-items:center; gap:7px}
+  .toggle:hover{color:var(--ink); border-color:var(--matcha)}
+  .toggle:focus-visible{outline:2px solid var(--matcha); outline-offset:2px}
+
+  /* hero */
+  .hero{padding:76px 0 60px; border-bottom:1px solid var(--line)}
+  .hero .kicker{font-size:13px; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--clay); margin:0 0 22px}
+  .hero h1{font-size:clamp(44px,9vw,88px); margin:0; letter-spacing:-.02em}
+  .hero h1 .the{display:block; font-size:.42em; letter-spacing:.32em; text-transform:uppercase; color:var(--muted); font-weight:500; margin-bottom:.35em}
+  .hero h1 em{font-style:italic; color:var(--matcha)}
+  .tagline{font-family:"Fraunces",serif; font-style:italic; font-size:clamp(20px,3.4vw,27px); color:var(--muted); margin:26px 0 0; max-width:560px}
+  .lede{font-size:19px; color:var(--ink); max-width:600px; margin:30px 0 0}
+  .facts{display:flex; flex-wrap:wrap; gap:10px; margin:34px 0 0}
+  .fact{background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:8px 16px; font-size:13.5px; font-weight:500; color:var(--muted); display:flex; align-items:center; gap:8px}
+  .fact b{color:var(--ink); font-weight:600}
+  .dot{width:6px; height:6px; border-radius:50%; background:var(--matcha); flex:none}
+
+  section{padding:64px 0; border-bottom:1px solid var(--line)}
+  section h2{font-size:clamp(28px,5vw,40px); margin:0 0 8px; letter-spacing:-.015em}
+  .sub{color:var(--muted); font-size:18px; margin:0 0 36px; max-width:600px}
+  section p{margin:0 0 18px}
+  section .prose p:last-child{margin-bottom:0}
+  strong{font-weight:600}
+
+  .callout{background:var(--matcha-wash); border:1px solid color-mix(in srgb,var(--matcha) 30%,transparent); border-radius:var(--radius); padding:22px 24px; margin:26px 0; font-size:16px}
+  .callout .lbl{font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--matcha); margin:0 0 8px}
+  .callout p{margin:0}
+
+  /* cards grid */
+  .grid{display:grid; gap:16px}
+  .grid.two{grid-template-columns:repeat(2,1fr)}
+  .grid.three{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:680px){.grid.two,.grid.three{grid-template-columns:1fr}}
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow)}
+  .card h3{font-size:20px; margin:0 0 8px}
+  .card p{font-size:15px; color:var(--muted); margin:0}
+  .card .tag{font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin:0 0 12px; display:block}
+
+  .stream{display:flex; gap:18px; align-items:flex-start; padding:22px 0; border-top:1px solid var(--line)}
+  .stream:first-child{border-top:0}
+  .stream .n{font-family:"Fraunces",serif; font-size:26px; color:var(--matcha); line-height:1; width:44px; flex:none; padding-top:2px}
+  .stream h3{font-size:18px; margin:0 0 5px}
+  .stream p{font-size:15px; color:var(--muted); margin:0}
+
+  /* pillars */
+  .pillar{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden}
+  .pillar .head{padding:20px 22px 16px; border-bottom:1px solid var(--line)}
+  .pillar .head .tag{font-size:11.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--clay)}
+  .pillar .head h3{font-size:19px; margin:6px 0 0}
+  .pillar ul{list-style:none; margin:0; padding:12px 22px 18px}
+  .pillar li{font-size:15px; padding:7px 0; color:var(--ink); display:flex; align-items:baseline; gap:10px; border-top:1px dashed var(--line)}
+  .pillar li:first-child{border-top:0}
+  .pillar li span{color:var(--muted); font-size:13px}
+
+  /* tables */
+  .tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); background:var(--surface); box-shadow:var(--shadow)}
+  table{width:100%; border-collapse:collapse; font-size:15px; min-width:480px}
+  th,td{text-align:left; padding:13px 20px; border-top:1px solid var(--line)}
+  thead th{border-top:0; font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); background:var(--surface-2)}
+  td.r,th.r{text-align:right; font-variant-numeric:tabular-nums}
+  tbody tr:hover{background:var(--matcha-wash)}
+  .total td{border-top:2px solid var(--line-strong); font-weight:700; background:var(--surface-2)}
+  .pos{color:var(--matcha); font-weight:700}
+  .neg{color:var(--clay); font-weight:700}
+  caption{caption-side:top; text-align:left; font-size:13px; color:var(--muted); padding:0 0 12px}
+
+  /* stat row */
+  .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:8px 0 32px}
+  @media(max-width:680px){.stats{grid-template-columns:1fr}}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:22px 20px}
+  .stat .k{font-family:"Fraunces",serif; font-size:34px; color:var(--matcha); line-height:1; font-variant-numeric:tabular-nums}
+  .stat .k.clay{color:var(--clay)}
+  .stat .l{font-size:13.5px; color:var(--muted); margin-top:8px}
+
+  /* checklist */
+  .check{list-style:none; margin:0; padding:0; counter-reset:c}
+  .check li{position:relative; padding:16px 0 16px 44px; border-top:1px solid var(--line)}
+  .check li:first-child{border-top:0}
+  .check li::before{counter-increment:c; content:counter(c); position:absolute; left:0; top:15px; width:28px; height:28px; border-radius:50%; background:var(--matcha); color:var(--ground); font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:center; font-variant-numeric:tabular-nums}
+  .check li b{display:block; font-size:16px; margin-bottom:2px}
+  .check li span{font-size:14.5px; color:var(--muted)}
+  .check li span a{font-weight:600}
+
+  /* ad copy block */
+  .ad{background:var(--surface); border:1px solid var(--line-strong); border-radius:var(--radius); padding:0; overflow:hidden; box-shadow:var(--shadow)}
+  .ad .hd{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 20px; background:var(--surface-2); border-bottom:1px solid var(--line)}
+  .ad .hd .t{font-size:12.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+  .ad .hd .flag{font-size:12px; font-weight:700; color:var(--matcha); background:var(--matcha-wash); padding:4px 10px; border-radius:999px}
+  .ad .body{padding:22px 24px; font-size:15.5px; line-height:1.6}
+  .ad .body p{margin:0 0 12px}
+  .ad .body p:last-child{margin-bottom:0}
+  .ad .cta{display:inline-block; margin-top:4px; background:var(--clay); color:#fff; font-weight:700; font-size:14px; padding:10px 22px; border-radius:999px}
+  :root[data-theme="dark"] .ad .cta,:root:not([data-theme="light"]) .ad .cta{color:#241a14}
+  @media(prefers-color-scheme:dark){.ad .cta{color:#241a14}}
+
+  .roadmap{display:grid; gap:0}
+  .phase{display:grid; grid-template-columns:120px 1fr; gap:24px; padding:22px 0; border-top:1px solid var(--line)}
+  .phase:first-child{border-top:0}
+  @media(max-width:680px){.phase{grid-template-columns:1fr; gap:6px}}
+  .phase .when{font-family:"Fraunces",serif; font-size:17px; color:var(--matcha); font-weight:600}
+  .phase h3{font-size:17px; margin:0 0 6px}
+  .phase p{font-size:15px; color:var(--muted); margin:0}
+
+  footer{padding:50px 0 70px; color:var(--faint); font-size:13.5px}
+  footer .prose{max-width:640px}
+  footer p{margin:0 0 10px}
+
+  .note{font-size:13.5px; color:var(--faint); font-style:italic; margin-top:16px}
+</style>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="brandmark">The <em>Woman</em> Edit</div>
+    <button class="toggle" id="tg" aria-label="Changer le thème">☾ Thème</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">Plan de lancement · Luxembourg · 2026</p>
+    <h1><span class="the">The</span><em>Woman</em> Edit</h1>
+    <p class="tagline">Become the woman of your dreams.</p>
+    <p class="lede">Des rendez-vous chill et premium où des femmes se retrouvent autour d'une table pour apprendre, un skill à la fois, à prendre soin d'elles — corps et esprit.</p>
+    <div class="facts">
+      <span class="fact"><span class="dot"></span> <b>Skincare&nbsp;&amp;&nbsp;Matcha</b> · événement d'ouverture</span>
+      <span class="fact"><span class="dot"></span> Positionnement <b>premium</b> · 60–75&nbsp;€</span>
+      <span class="fact"><span class="dot"></span> <b>Luxembourg-Ville</b></span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap prose">
+    <p class="eyebrow">01 — Le concept</p>
+    <h2>Tu ne vends pas une formation. Tu vends une version d'elle-même.</h2>
+    <p class="sub">Le format, c'est ta signature : un skill concret + un moment gourmand + une pro qui transmet + un take-home. Répétable à l'infini, instagrammable par nature, communautaire par construction.</p>
+
+    <p>La promesse tient en une phrase&nbsp;: <strong>devenir une femme «&nbsp;put together&nbsp;»</strong> — celle qui sait prendre soin d'elle, physiquement comme mentalement, sans que ça soit une corvée. Chaque événement enseigne <strong>une compétence du quotidien</strong> dans une ambiance douce, entre femmes, autour d'une boisson. On repart avec un vrai savoir-faire, pas juste un bon souvenir.</p>
+
+    <p>Ta trouvaille — le duo «&nbsp;<em>skill&nbsp;+&nbsp;boisson cosy</em>&nbsp;» — n'est pas un détail esthétique. C'est le cœur du modèle&nbsp;: c'est ce qui rend l'expérience <strong>désirable, partageable et facile à sponsoriser par des marques</strong>. À Luxembourg, où le pouvoir d'achat est le plus élevé d'Europe et où une immense communauté de jeunes actives internationales cherche à la fois du self-care et du lien, ce créneau premium est libre. Tu peux devenir <strong>la</strong> référence.</p>
+
+    <div class="callout">
+      <p class="lbl">La communauté au centre</p>
+      <p>Donne un nom à tes membres (les «&nbsp;Edit Girls&nbsp;»). L'appartenance est ce qui transforme une cliente d'un soir en habituée qui revient à chaque thème — et qui amène ses amies. C'est ton moteur de croissance gratuit.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">02 — Modèle économique</p>
+    <h2 style="max-width:640px">Quatre sources de revenus, pas seulement le billet.</h2>
+    <p class="sub">C'est ce mix qui rend le projet réellement rentable. Le billet finance l'expérience&nbsp;; les partenariats et le membership font la marge.</p>
+    <div class="prose" style="max-width:720px">
+      <div class="stream"><div class="n">01</div><div><h3>Billetterie</h3><p>Revenu de base et signal de sérieux. Le premium (60–75&nbsp;€) filtre l'audience et finance l'essentiel du coût de chaque événement.</p></div></div>
+      <div class="stream"><div class="n">02</div><div><h3>Partenariats marques</h3><p>Beauté, skincare, boissons, mode. Elles paient (ou fournissent produits &amp; échantillons) pour toucher, en présentiel, une audience ultra-qualifiée. C'est ta plus grosse marge à terme.</p></div></div>
+      <div class="stream"><div class="n">03</div><div><h3>Commissions sur ventes</h3><p>Produits présentés/prescrits par l'intervenante et vendus sur place, ou codes de réduction traçables. 10–20&nbsp;% qui tombent sans coût supplémentaire.</p></div></div>
+      <div class="stream"><div class="n">04</div><div><h3>Membership (dès le mois 3)</h3><p>Un abonnement «&nbsp;Edit Members&nbsp;»&nbsp;: accès prioritaire, tarif membre, un événement exclusif par trimestre. Revenu récurrent et prévisible.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">03 — La gamme</p>
+    <h2>Trois piliers, une identité claire.</h2>
+    <p class="sub">Ranger tes idées d'événements en piliers donne de la cohérence à la marque et permet de programmer une saison entière à l'avance.</p>
+    <div class="grid three">
+      <div class="pillar">
+        <div class="head"><span class="tag">Pilier 1</span><h3>Skin &amp; Body</h3></div>
+        <ul>
+          <li>Skincare &amp; Matcha <span>· ouverture</span></li>
+          <li>Botox &amp; Brunch</li>
+          <li>Pilates &amp; Protein</li>
+          <li>Nails &amp; Iced Latte</li>
+        </ul>
+      </div>
+      <div class="pillar">
+        <div class="head"><span class="tag">Pilier 2</span><h3>Style &amp; Confidence</h3></div>
+        <ul>
+          <li>Self Make-up &amp; Latte</li>
+          <li>Dress &amp; Cappuccino</li>
+          <li>Perfume &amp; Prosecco</li>
+          <li>Personal Branding &amp; Chai</li>
+        </ul>
+      </div>
+      <div class="pillar">
+        <div class="head"><span class="tag">Pilier 3</span><h3>Mind &amp; Craft</h3></div>
+        <ul>
+          <li>Ceramics &amp; Brunch</li>
+          <li>Journaling &amp; Chai</li>
+          <li>Finance &amp; Flat White</li>
+          <li>Pottery &amp; Wine</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">Chaque nom garde ta formule «&nbsp;skill&nbsp;+&nbsp;boisson&nbsp;». C'est la mécanique qui rend la marque reconnaissable en un coup d'œil.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">04 — Plan financier</p>
+    <h2>Skincare &amp; Matcha, chiffré.</h2>
+    <p class="sub">Hypothèses réalistes pour Luxembourg-Ville : petit groupe premium, une facialiste pro, un lieu cosy. Deux scénarios — selon que tu payes tout, ou que tu actives des partenariats.</p>
+
+    <div class="stats">
+      <div class="stat"><div class="k">18</div><div class="l">places (petit groupe premium)</div></div>
+      <div class="stat"><div class="k">68&nbsp;€</div><div class="l">prix moyen du billet réalisé</div></div>
+      <div class="stat"><div class="k">1&nbsp;222&nbsp;€</div><div class="l">recette billetterie à guichet plein</div></div>
+    </div>
+    <p class="note" style="margin-top:-16px">Tarification à deux paliers&nbsp;: <b>Early bird 59&nbsp;€</b> (8 premières) puis <b>Standard 75&nbsp;€</b> (10 suivantes) → 8×59 + 10×75 = 1&nbsp;222&nbsp;€.</p>
+
+    <h3 style="font-size:20px; margin:36px 0 14px">Compte de résultat de l'événement</h3>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Poste</th>
+            <th class="r">Scénario A · tout payé</th>
+            <th class="r">Scénario B · partenariats</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Recettes</b></td><td class="r"></td><td class="r"></td></tr>
+          <tr><td>Billetterie (18 places)</td><td class="r num">1 222 €</td><td class="r num">1 222 €</td></tr>
+          <tr><td>Partenariat marque (sampling &amp; visibilité)</td><td class="r num">—</td><td class="r num">500 €</td></tr>
+          <tr><td>Commissions produits vendus sur place</td><td class="r num">54 €</td><td class="r num">54 €</td></tr>
+          <tr class="total"><td>Total recettes</td><td class="r num">1 276 €</td><td class="r num">1 776 €</td></tr>
+
+          <tr><td><b>Dépenses</b></td><td class="r"></td><td class="r"></td></tr>
+          <tr><td>Lieu (privatisation 3 h)</td><td class="r num">350 €</td><td class="r num">0 €</td></tr>
+          <tr><td>Intervenante facialiste</td><td class="r num">250 €</td><td class="r num">0 €</td></tr>
+          <tr><td>Matcha &amp; finger food</td><td class="r num">252 €</td><td class="r num">150 €</td></tr>
+          <tr><td>Take-home (sac, fiche, échantillons)</td><td class="r num">108 €</td><td class="r num">108 €</td></tr>
+          <tr><td>Décoration &amp; fleurs</td><td class="r num">120 €</td><td class="r num">100 €</td></tr>
+          <tr><td>Photographe / contenu</td><td class="r num">200 €</td><td class="r num">150 €</td></tr>
+          <tr><td>Publicité Meta</td><td class="r num">400 €</td><td class="r num">400 €</td></tr>
+          <tr><td>Divers (frais billetterie, imprévus)</td><td class="r num">130 €</td><td class="r num">100 €</td></tr>
+          <tr class="total"><td>Total dépenses</td><td class="r num">1 810 €</td><td class="r num">1 008 €</td></tr>
+
+          <tr class="total"><td>Résultat net</td><td class="r"><span class="neg">− 534 €</span></td><td class="r"><span class="pos">+ 768 €</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout" style="background:var(--clay-wash); border-color:color-mix(in srgb,var(--clay) 34%,transparent)">
+      <p class="lbl" style="color:var(--clay)">La décision qui change tout</p>
+      <p>Le 1ᵉʳ événement «&nbsp;tout payé&nbsp;» est un <strong>investissement d'acquisition</strong> (≈&nbsp;−530&nbsp;€) — normal pour lancer une marque. Mais dès que tu sécurises <strong>2 ou 3 partenariats</strong> (un lieu qui prête son espace contre visibilité, l'intervenante en échange de clientes, une marque qui finance le sampling), <strong>le même événement devient rentable (+770&nbsp;€)</strong>. Ton vrai travail avant le lancement, c'est là.</p>
+    </div>
+
+    <h3 style="font-size:20px; margin:38px 0 14px">Seuil de rentabilité &amp; économie unitaire</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Indicateur</th><th class="r">Scénario A</th><th class="r">Scénario B</th></tr></thead>
+        <tbody>
+          <tr><td>Coûts fixes de l'événement</td><td class="r num">1 450 €</td><td class="r num">750 €</td></tr>
+          <tr><td>Coût variable par participante</td><td class="r num">20 €</td><td class="r num">14 €</td></tr>
+          <tr><td>Marge par billet (à 68 €)</td><td class="r num">48 €</td><td class="r num">54 €</td></tr>
+          <tr class="total"><td>Seuil de rentabilité</td><td class="r num">≈ 31 billets</td><td class="r num">≈ 14 billets</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Lecture&nbsp;: en payant tout, la rentabilité arrive au-delà de la capacité d'une petite salle → il faut soit un lieu plus grand, soit des partenariats. En scénario B, tu es <b>rentable dès 14 places vendues sur 18</b>, et le partenariat marque te met dans le vert bien avant.</p>
+
+    <h3 style="font-size:20px; margin:38px 0 14px">Projection 6 mois <span style="font-size:14px; color:var(--faint); font-weight:400">— scénario indicatif</span></h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Mois</th><th>Activité</th><th class="r">Participantes</th><th class="r">Résultat net</th><th class="r">Cumulé</th></tr></thead>
+        <tbody>
+          <tr><td>Mois 1</td><td>1 événement · lancement</td><td class="r num">18</td><td class="r num">+ 250 €</td><td class="r num">+ 250 €</td></tr>
+          <tr><td>Mois 2</td><td>1 événement · partenariats consolidés</td><td class="r num">20</td><td class="r num">+ 650 €</td><td class="r num">+ 900 €</td></tr>
+          <tr><td>Mois 3</td><td>2 événements · lancement membership</td><td class="r num">40</td><td class="r num">+ 1 500 €</td><td class="r num">+ 2 400 €</td></tr>
+          <tr><td>Mois 4</td><td>2 événements</td><td class="r num">44</td><td class="r num">+ 1 900 €</td><td class="r num">+ 4 300 €</td></tr>
+          <tr><td>Mois 5</td><td>2 événements · 1ᵉʳ sponsor marque récurrent</td><td class="r num">48</td><td class="r num">+ 2 600 €</td><td class="r num">+ 6 900 €</td></tr>
+          <tr><td>Mois 6</td><td>2 événements · membership qui monte</td><td class="r num">52</td><td class="r num">+ 3 200 €</td><td class="r num">+ 10 100 €</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Hypothèses volontairement prudentes&nbsp;: montée progressive des partenariats, remplissage croissant, membership léger. À valider événement après événement avec tes vrais chiffres.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">05 — Plan marketing</p>
+    <h2>Attirer, remplir, fidéliser.</h2>
+    <p class="sub">À Luxembourg, tout se joue sur Instagram + le bouche-à-oreille de la communauté expat/jeunes actives. Ta pub sert à amorcer&nbsp;; ta communauté fait le reste.</p>
+
+    <div class="grid two">
+      <div class="card"><span class="tag">Cible</span><h3>Qui vises-tu</h3><p>Femmes 25–40 ans à Luxembourg&nbsp;: actives (finance, institutions, corporate), expat's, revenus élevés, sensibles au self-care et en recherche de lien social de qualité. FR &amp; EN.</p></div>
+      <div class="card"><span class="tag">Positionnement</span><h3>Ce qui te distingue</h3><p>Ni un cours magistral, ni une soirée qui sonne creux. Un entre-soi premium et chaleureux où on apprend vraiment quelque chose d'utile. «&nbsp;Le self-care, version qui te rend meilleure.&nbsp;»</p></div>
+    </div>
+
+    <h3 style="font-size:20px; margin:36px 0 16px">Le tunnel, de l'inconnue à la place réservée</h3>
+    <div class="grid two">
+      <div class="card"><span class="tag">1 · Découverte</span><h3>Pub Meta + Reels</h3><p>Une pub Instagram/Facebook ciblée Luxembourg + du contenu organique (Reels esthétiques du concept). But&nbsp;: faire découvrir la marque et l'événement.</p></div>
+      <div class="card"><span class="tag">2 · Intérêt</span><h3>Page Insta soignée</h3><p>Bio claire, lien billetterie, 6–9 posts qui montrent l'ambiance, la promesse, l'intervenante. La page doit «&nbsp;vendre&nbsp;» avant même la pub.</p></div>
+      <div class="card"><span class="tag">3 · Conversion</span><h3>Billetterie en 2 clics</h3><p>Lien direct vers Eventbrite / Billetweb / Weezevent. Early bird limité dans le temps → crée l'urgence. Paiement immédiat.</p></div>
+      <div class="card"><span class="tag">4 · Fidélisation</span><h3>Communauté &amp; membership</h3><p>Groupe WhatsApp/Broadcast des Edit Girls, contenu après l'événement, annonce du thème suivant en avant-première aux présentes.</p></div>
+    </div>
+
+    <div class="callout" style="margin-top:32px">
+      <p class="lbl">Stratégie partenariats — à activer dès cette semaine</p>
+      <p>Contacte <strong>3 types de partenaires</strong> pour ton 1ᵉʳ événement&nbsp;: (1) un <strong>lieu</strong> — concept store beauté, salon, coffee shop haut de gamme — qui prête son espace contre visibilité&nbsp;; (2) une <strong>facialiste / marque skincare</strong> qui vient animer et fournit les échantillons&nbsp;; (3) une <strong>marque de matcha / boisson</strong> pour le catering. Argument clé pour elles&nbsp;: «&nbsp;18 femmes premium à Luxembourg, en présentiel, autour de vos produits, avec du contenu photo pro à la clé.&nbsp;»</p>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--surface-2)">
+  <div class="wrap">
+    <p class="eyebrow">06 — Lancer la pub demain</p>
+    <h2>Ton plan d'action pour demain.</h2>
+    <p class="sub">L'ordre exact des choses à faire pour publier ta première pub dans les 24 h. Rien de superflu.</p>
+
+    <ol class="check">
+      <li><b>Crée / peaufine le compte Instagram professionnel</b><span>Nom&nbsp;: <b>The Woman Edit</b>. Bio&nbsp;: la promesse + «&nbsp;📍 Luxembourg&nbsp;» + le lien billetterie. Poste 3 visuels avant de lancer la pub, pour ne pas envoyer les gens sur une page vide.</span></li>
+      <li><b>Fixe la date, l'heure et le lieu du 1ᵉʳ événement</b><span>Un samedi ou dimanche après-midi (14 h–17 h) dans 3 à 4 semaines&nbsp;: assez proche pour l'énergie, assez loin pour remplir et caler les partenaires.</span></li>
+      <li><b>Ouvre la billetterie</b><span>Eventbrite, Billetweb ou Weezevent (gratuits, paiement intégré). Deux tarifs&nbsp;: Early bird 59 € (8 places) / Standard 75 €. C'est le lien que la pub pointera.</span></li>
+      <li><b>Prépare le visuel de la pub</b><span>1 photo/vidéo verticale (9:16) très esthétique&nbsp;: table dressée, matcha, soins, lumière douce. Pas encore de photo réelle&nbsp;? Une belle mise en scène ou une image de banque premium suffit pour démarrer.</span></li>
+      <li><b>Copie-colle le texte de la pub</b><span>Version FR + EN ci-dessous. Objectif de campagne&nbsp;: «&nbsp;Interactions / Trafic&nbsp;» vers la billetterie (pas «&nbsp;Notoriété&nbsp;»).</span></li>
+      <li><b>Règle le ciblage &amp; le budget</b><span>Localisation Luxembourg (+15 km), femmes 25–42 ans, centres d'intérêt&nbsp;: skincare, beauté, self-care, brunch, yoga. Budget&nbsp;: 12–15 €/jour pendant 3–4 jours pour tester, puis on double ce qui marche.</span></li>
+      <li><b>Lance, puis regarde à J+2</b><span>Coût par clic, réservations, meilleur visuel. On garde le gagnant, on coupe le reste, on remet du budget dessus.</span></li>
+    </ol>
+
+    <h3 style="font-size:20px; margin:40px 0 16px">Texte de la pub — prêt à copier</h3>
+    <div class="grid two">
+      <div class="ad">
+        <div class="hd"><span class="t">Version française</span><span class="flag">Meta · Instagram</span></div>
+        <div class="body">
+          <p>✨ <b>The Woman Edit — Skincare &amp; Matcha</b></p>
+          <p>Un après-midi rien qu'entre nous, autour d'une table, un matcha à la main.</p>
+          <p>Une facialiste pro t'apprend à (enfin) comprendre <b>ta</b> peau et les soins qui lui vont vraiment. Tu repars avec ta routine sur-mesure, tes échantillons, et une communauté de femmes qui, comme toi, ont décidé de prendre soin d'elles.</p>
+          <p>📍 Luxembourg · 🎟️ Places très limitées · Early bird ouvert</p>
+          <p><i>Become the woman of your dreams. Ça commence ici.</i></p>
+          <span class="cta">Réserver ma place →</span>
+        </div>
+      </div>
+      <div class="ad">
+        <div class="hd"><span class="t">English version</span><span class="flag">Meta · Instagram</span></div>
+        <div class="body">
+          <p>✨ <b>The Woman Edit — Skincare &amp; Matcha</b></p>
+          <p>An afternoon just for us — around one table, matcha in hand.</p>
+          <p>A pro facialist teaches you to finally understand <b>your</b> skin and the routine that actually works for it. Leave with your tailored routine, your samples, and a community of women who — like you — decided to start putting themselves first.</p>
+          <p>📍 Luxembourg · 🎟️ Very limited seats · Early bird now open</p>
+          <p><i>Become the woman of your dreams. It starts here.</i></p>
+          <span class="cta">Save my seat →</span>
+        </div>
+      </div>
+    </div>
+    <p class="note">Titre court de la pub (headline)&nbsp;: «&nbsp;Skincare &amp; Matcha — Luxembourg&nbsp;» · Bouton&nbsp;: «&nbsp;Réserver&nbsp;» / «&nbsp;Book now&nbsp;».</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">07 — Les 90 premiers jours</p>
+    <h2>De la première pub à la marque installée.</h2>
+    <div class="roadmap">
+      <div class="phase"><div class="when">Jours 1–3</div><div><h3>Amorçage</h3><p>Compte Insta + billetterie ouverts, pub lancée, premiers contacts partenaires (lieu, facialiste, matcha). On récolte les premières réservations et on lit les chiffres de la pub.</p></div></div>
+      <div class="phase"><div class="when">Semaines 1–4</div><div><h3>Remplir &amp; livrer le 1ᵉʳ événement</h3><p>Optimiser la pub, closer les partenariats, remplir les 18 places. Le jour J&nbsp;: photographe présent, contenu capturé, chaque participante ajoutée à la communauté.</p></div></div>
+      <div class="phase"><div class="when">Mois 2</div><div><h3>Rejouer &amp; prouver</h3><p>2ᵉ événement (même thème ou Self Make-up &amp; Latte) en réutilisant le contenu du 1ᵉʳ comme preuve sociale. Négocier un partenariat marque payant grâce aux photos de l'édition d'ouverture.</p></div></div>
+      <div class="phase"><div class="when">Mois 3</div><div><h3>Passer à l'échelle</h3><p>Rythme de 2 événements/mois, lancement du membership «&nbsp;Edit Girls&nbsp;», calendrier de saison publié à l'avance. La marque devient une habitude à Luxembourg.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap prose">
+    <p><strong>Note pratique — cadre légal Luxembourg.</strong> Pour encaisser des billets et facturer, tu auras besoin d'un statut (autorisation d'établissement / activité indépendante ou société). Ça ne bloque pas le lancement de la pub ni la prise de réservations, mais à caler en parallèle dès les premières ventes. Un take-home «&nbsp;offert par nos partenaires&nbsp;» simplifie aussi la partie TVA sur les produits.</p>
+    <p>Document de travail — <em>The Woman Edit</em>, plan de lancement, Luxembourg 2026. Chiffres à affiner avec les devis réels de ton lieu, ton intervenante et tes partenaires.</p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var root=document.documentElement, btn=document.getElementById('tg');
+    var saved; try{saved=localStorage.getItem('twe-theme')}catch(e){}
+    if(saved){root.setAttribute('data-theme',saved)}
+    function label(){
+      var dark = root.getAttribute('data-theme')==='dark' ||
+        (!root.getAttribute('data-theme') && matchMedia('(prefers-color-scheme:dark)').matches);
+      btn.textContent = dark ? '☀ Thème' : '☾ Thème';
+    }
+    label();
+    btn.addEventListener('click',function(){
+      var cur=root.getAttribute('data-theme');
+      var isDark = cur==='dark' || (!cur && matchMedia('(prefers-color-scheme:dark)').matches);
+      var next = isDark ? 'light':'dark';
+      root.setAttribute('data-theme',next);
+      try{localStorage.setItem('twe-theme',next)}catch(e){}
+      label();
+    });
+  })();
+</script>
