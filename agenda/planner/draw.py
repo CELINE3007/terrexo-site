@@ -25,9 +25,11 @@ class Sheet:
         self.pages = 0
 
     # -- cycle de vie ------------------------------------------------------
-    def begin(self, side="right"):
+    def begin(self, side="right", brand_mark=True):
+        """brand_mark=False : page sans la marque verticale (couverture, citation)."""
         t = self.theme
         self.side = side
+        self._mark = brand_mark
         if side == "right":
             self.x0, self.x1 = t.margin_ring * mm, self.W - t.margin_out * mm
         else:
@@ -52,7 +54,7 @@ class Sheet:
         return self.pages
 
     def _brand_mark(self):
-        if not self.brand:
+        if not self.brand or not getattr(self, "_mark", True):
             return
         t, c = self.theme, self.c
         c.saveState()

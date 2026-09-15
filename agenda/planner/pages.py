@@ -34,7 +34,7 @@ class Ctx:
 # Pages d'ouverture
 # --------------------------------------------------------------------------
 def cover(sh, ctx, side="right"):
-    sh.begin(side)
+    sh.begin(side, brand_mark=False)
     t, L = sh.theme, ctx.L
     y = sh.y1 - 42 * mm
     sh.text((sh.x0 + sh.x1) / 2, y, str(ctx.year), size=30, align="c", tracking=9)
@@ -56,7 +56,7 @@ def cover(sh, ctx, side="right"):
 
 def quote(sh, ctx, line1, line2, line3="", side="right"):
     """Page citation, facon separateur."""
-    sh.begin(side)
+    sh.begin(side, brand_mark=False)
     t = sh.theme
     cx, y = (sh.x0 + sh.x1) / 2, sh.H * 0.60
     sh.text(cx, y, line1.upper(), size=15, align="c", tracking=3)

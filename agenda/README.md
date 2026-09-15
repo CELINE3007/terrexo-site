@@ -56,7 +56,7 @@ Les fichiers arrivent dans `export/<année>/<langue>/` :
 | `--sections hebdo,mensuel` | ne régénérer qu'une partie |
 | `--months 1-6` | limiter les mois générés |
 | `--notes 10` | nombre de pages de notes |
-| `--brand "Ma Marque"` | votre nom, imprimé en tout petit dans la marge |
+| `--brand "My Line Planner"` | votre marque, imprimée en tout petit dans la marge (valeur par défaut ; `--brand ""` pour l'enlever) |
 | `--guides` | repères de perforation 6 anneaux (à ne pas laisser sur la version vendue) |
 | `--split 3` | 3 jours sur la page de gauche au lieu de 4 |
 | `--font-serif Fichier.ttf` | votre propre police (voir plus bas) |
@@ -66,8 +66,11 @@ Exemple, un pack complet signé, sans repères de perforation :
 
 ```bash
 python3 generate.py --year 2027 --lang both --week-start both --layout both \
-  --brand "TERREXO"
+  --brand "My Line Planner"
 ```
+
+La marque **My Line Planner** est la valeur par défaut : elle s'imprime seule,
+sans avoir à passer l'option.
 
 ## 4. Personnaliser (c'est là que se fait la différence)
 
@@ -127,7 +130,7 @@ Quelques points de vigilance :
   même pour vos photos de présentation : produisez vos propres maquettes.
 - **Vérification.** Avant publication, imprimez une semaine, un mois et une page
   annuelle sur papier, et vérifiez les dates d'un mois au hasard.
-- **Traçabilité.** `--brand` imprime discrètement votre nom sur chaque page.
+- **Traçabilité.** `--brand` imprime discrètement « My Line Planner » sur chaque page ; `--brand ""` retire la mention.
 
 ## 7. Structure du dossier
 

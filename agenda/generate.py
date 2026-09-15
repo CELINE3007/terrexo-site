@@ -5,7 +5,7 @@ Exemples :
     python3 generate.py                          # 2027, FR, semaine au lundi
     python3 generate.py --year 2027 --lang both --week-start both
     python3 generate.py --sections hebdo --layout vertical
-    python3 generate.py --size a4 --brand "Ma Marque"
+    python3 generate.py --size a4 --brand "Autre Marque"
 
 Les fichiers sont ecrits dans export/<annee>/<langue>/.
 """
@@ -41,9 +41,9 @@ def sec_couverture(sh, ctx, o):
     if o.quotes:
         L = ctx.L
         if L["code"] == "fr":
-            P.quote(sh, ctx, "Les reves", "deviennent des plans", "quand on les ecrit")
+            P.quote(sh, ctx, "Une année se construit", "une ligne", "à la fois")
         else:
-            P.quote(sh, ctx, "Dreams", "become plans", "when you write them down")
+            P.quote(sh, ctx, "A year is built", "one line", "at a time")
 
 
 def sec_annuel(sh, ctx, o):
@@ -209,7 +209,8 @@ def main(argv=None):
     p.add_argument("--notes", type=int, default=6, help="nombre de pages de notes")
     p.add_argument("--split", type=int, default=4,
                    help="jours sur la page de gauche (4 = lun-jeu)")
-    p.add_argument("--brand", default="", help="votre marque, imprimee en filigrane")
+    p.add_argument("--brand", default="MY LINE PLANNER",
+                   help="marque imprimee en filigrane (\"\" pour aucune)")
     p.add_argument("--font-serif", dest="font_serif", default="",
                    help="chemin d'une police .ttf pour les titres")
     p.add_argument("--font-serif-italic", dest="font_serif_italic", default="")
