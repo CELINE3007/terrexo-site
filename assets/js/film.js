@@ -24,7 +24,7 @@
         'E-mail : ' + email + '\n' +
         'Téléphone : ' + tel + '\n\n' +
         'Mon projet :\n' + msg + '\n';
-      var href = 'mailto:info@terrexo.lu' +
+      var href = 'mailto:info@kheops.lu' +
         '?subject=' + encodeURIComponent('Étude gratuite — ' + nom) +
         '&body=' + encodeURIComponent(body);
       window.location.href = href;
