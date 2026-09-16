@@ -300,7 +300,16 @@ def layout_citation(ins, art_path, title, sub):
     ins.wordmark()
 
 
-LAYOUTS = {"arche": layout_arche, "cadre": layout_cadre,
+def layout_nue(ins, art_path, title, sub):
+    """Le dessin seul, a fond perdu : c'est la mise en page des dashboards."""
+    if art_path:
+        img = prepare_art(art_path, (ins.W, ins.H))
+        ins.c.drawImage(ImageReader(img), 0, 0, ins.W, ins.H, mask="auto")
+    else:
+        ins.background("bg")
+
+
+LAYOUTS = {"nue": layout_nue, "arche": layout_arche, "cadre": layout_cadre,
            "pleine": layout_pleine, "citation": layout_citation}
 
 
