@@ -87,6 +87,11 @@ def sec_pages_datees(sh, ctx, o):
     buckets = weeks_by_month(ctx)
     for m in o.months:
         P.month_cover(sh, ctx, m)
+        if o.budget_month:
+            # au verso de la page de garde : budget du mois, puis page libre.
+            # Les deux vont de pair : le rythme des doubles pages reste juste.
+            P.budget(sh, ctx, month=m)
+            P.notes(sh, ctx, dotted=True)
         P.month_spread(sh, ctx, m, split=o.split)
         for monday in buckets[m]:
             if o.layout == "vertical":
@@ -108,9 +113,21 @@ def sec_bonus(sh, ctx, o):
     if o.preset == "complet":
         for start in (1, 5, 9):
             P.next_year_dates(sh, ctx, [start, start + 1, start + 2, start + 3])
+    for name, fn in EXTRA_PAGES:
+        for _ in range(o.extras.get(name, 0)):
+            fn(sh, ctx)
     for i in range(o.notes):
         P.notes(sh, ctx, dotted=(i % 2 == 1))
 
+
+# Pages supplementaires, activables a la demande (--extras)
+EXTRA_PAGES = [
+    ("budget", lambda sh, ctx: P.budget(sh, ctx)),
+    ("menus", lambda sh, ctx: P.meals(sh, ctx)),
+    ("lecture", lambda sh, ctx: P.reading(sh, ctx)),
+    ("contacts", lambda sh, ctx: P.contacts(sh, ctx)),
+]
+EXTRA_DEFAULTS = {"budget": 1, "menus": 4, "lecture": 2, "contacts": 2}
 
 PRESET_SECTIONS = {
     "semainier": ["impression", "ouverture", "vue-ensemble", "pages-datees"],
@@ -224,6 +241,23 @@ def run(o):
     print("\n%d pages generees dans %s/" % (total, o.out))
 
 
+def parse_extras(value):
+    """--extras tout | budget,menus | budget=2,menus=6"""
+    if not value:
+        return {}
+    if value.strip() in ("tout", "all"):
+        return dict(EXTRA_DEFAULTS)
+    out = {}
+    for chunk in value.split(","):
+        name, _, count = chunk.partition("=")
+        name = name.strip()
+        if name not in EXTRA_DEFAULTS:
+            raise SystemExit("page supplementaire inconnue : %s (choix : %s)"
+                             % (name, ", ".join(EXTRA_DEFAULTS)))
+        out[name] = int(count) if count else EXTRA_DEFAULTS[name]
+    return out
+
+
 def parse_months(value):
     if value in (None, "", "all", "tout"):
         return list(range(1, 13))
@@ -259,6 +293,11 @@ def main(argv=None):
     p.add_argument("--pack", action="store_true",
                    help="genere toutes les variantes (FR/EN, lundi/dimanche, "
                         "horizontal/vertical) et les PDF par section")
+    p.add_argument("--extras", default="",
+                   help="pages supplementaires : budget, menus, lecture, contacts "
+                        "(ex. --extras tout ou --extras budget=2,menus=6)")
+    p.add_argument("--budget-par-mois", action="store_true", dest="budget_month",
+                   help="un budget + une page libre au debut de chaque mois")
     p.add_argument("--notes", type=int, default=6, help="nombre de pages de notes")
     p.add_argument("--split", type=int, default=4,
                    help="jours sur la page de gauche (4 = lun-jeu)")
@@ -289,6 +328,7 @@ def main(argv=None):
         o.notes = min(o.notes, 2)
     o.sections = [s.strip() for s in o.sections.split(",")]
     o.months = parse_months(o.months)
+    o.extras = parse_extras(o.extras)
     bad = [s for s in o.sections if s not in SECTION_NAMES + ["tout"]]
     if bad:
         p.error("section inconnue : %s" % ", ".join(bad))

@@ -48,6 +48,14 @@ juste, et une page blanche est insérée quand il en faut une.
 | **Section 3 · Pages datées** | pour chaque mois : page de garde et habitudes, double page calendrier, les semaines du mois, bilan du mois | 160 |
 | **Section 4 · Bonus** | tâches récurrentes, liste maîtresse, cadeaux, bilan de l'année, dates 2028, notes | 15 |
 
+Quatre pages supplémentaires s'ajoutent à la demande, en fin de section 4 :
+**budget** (revenus, charges fixes, dépenses variables, bilan), **menus de la
+semaine** avec liste de courses, **journal de lecture** (titre, auteur, date,
+avis sur cinq pastilles) et **répertoire de contacts**. Avec
+`--budget-par-mois`, le budget se place plutôt au verso de chaque page de garde
+mensuelle, suivi d'une page libre — les deux vont de pair pour que le rythme
+des doubles pages reste juste.
+
 Chaque semaine est rangée dans le mois où elle commence, comme dans un agenda
 relié : on ouvre janvier, on trouve son calendrier puis ses semaines, et le
 bilan du mois avant de passer à février.
@@ -73,6 +81,9 @@ bilan du mois avant de passer à février.
 | `--sections vue-ensemble,pages-datees` | ne régénérer qu'une partie |
 | `--months 1-6` | limiter les mois |
 | `--notes 10` | nombre de pages de notes |
+| `--extras tout` | ajoute les pages budget, menus, lecture, contacts |
+| `--extras budget=2,menus=6` | même chose, en choisissant les quantités |
+| `--budget-par-mois` | un budget + une page libre au début de chaque mois |
 | `--brand "My Line Planner"` | marque en filigrane (`--brand ""` pour l'enlever) |
 | `--guides` | repères de perforation 6 anneaux (à retirer de la version vendue) |
 | `--split 3` | 3 jours sur la page de gauche au lieu de 4 |

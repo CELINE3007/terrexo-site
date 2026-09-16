@@ -756,3 +756,138 @@ def brand_specimen(sh, ctx, brand="My Line Planner"):
                  "produit vendu. Les fichiers et les licences se trouvent dans le "
                  "dossier agenda/fonts/.", w, size=7.4, font=t.serif_it, color=t.soft)
     sh.finish()
+
+
+# --------------------------------------------------------------------------
+# Pages supplementaires
+# --------------------------------------------------------------------------
+def _money_rows(sh, y, n, gap, amount_w):
+    """Lignes d'ecriture avec une colonne de montants a droite."""
+    t = sh.theme
+    xa = sh.x1 - amount_w
+    for i in range(n):
+        yy = y - gap * i
+        sh.rule(sh.x0, yy, amount_w and (xa - sh.x0 - 3 * mm) or sh.w)
+        sh.rule(xa, yy, amount_w)
+    sh.vrule(xa - 3 * mm, y - gap * (n - 1) - 2 * mm, gap * (n - 1) + 8 * mm,
+             color=t.hair)
+    return y - gap * (n - 1)
+
+
+def budget(sh, ctx, month=None, side=None):
+    """Budget du mois : revenus, charges fixes, depenses variables, bilan."""
+    sh.begin(side)
+    t, L = sh.theme, ctx.L
+    y = sh.banner(L["budget"], sub=ctx.monthname(month) if month else "")
+    amount_w = 26 * mm
+    gap = 6.6 * mm
+
+    if not month:
+        sh.text(sh.x0, y - 2 * mm, L["budget_month"] + " :", font=t.serif_it,
+                size=8, color=t.soft)
+        sh.rule(sh.x0 + 20 * mm, y - 2.6 * mm, 52 * mm)
+        y -= 11 * mm
+    else:
+        y -= 2 * mm
+
+    for title, rows in ((L["income"], 4), (L["fixed"], 7), (L["variable"], 7)):
+        sh.label(sh.x0, y, title, size=6.6, color=t.ink, tracking=2)
+        sh.text(sh.x1 - amount_w, y, L["amount"], font=t.serif_it, size=6.6,
+                color=t.soft)
+        y -= 6 * mm
+        y = _money_rows(sh, y, rows, gap, amount_w) - 11 * mm
+
+    box_h = max(y - sh.y0 - 2 * mm, 16 * mm)
+    colw = (sh.w - 8 * mm) / 3
+    for i, lab in enumerate((L["total_in"], L["total_out"], L["saved"])):
+        x = sh.x0 + i * (colw + 4 * mm)
+        sh.box(x, sh.y0, colw, box_h, color=t.hair,
+               fill=t.wash if i == 2 else None)
+        sh.label(x + colw / 2, sh.y0 + box_h - 6 * mm, lab, size=5.8, align="c",
+                 tracking=1.4)
+    sh.finish()
+
+
+def reading(sh, ctx, side=None):
+    """Journal de lecture : titre, auteur, date de fin, avis en cinq pastilles."""
+    sh.begin(side)
+    t, L = sh.theme, ctx.L
+    y = sh.header(L["reading"], right=str(ctx.year))
+    c_auth = sh.x0 + sh.w * 0.40
+    c_done = sh.x0 + sh.w * 0.66
+    c_note = sh.x1 - 23 * mm
+    for label, x in ((L["book_title"], sh.x0), (L["book_author"], c_auth),
+                     (L["book_done"], c_done), (L["book_rating"], c_note + 1 * mm)):
+        sh.text(x, y, label, font=t.serif_it, size=6.2, color=t.soft)
+    y -= 3 * mm
+    sh.rule(sh.x0, y, sh.w, color=t.rule)
+    y -= 7 * mm
+
+    gap = 8.6 * mm
+    rows = max(int((y - sh.y0) / gap) + 1, 1)
+    for r in range(rows):
+        yy = y - gap * r
+        sh.rule(sh.x0, yy, sh.w)
+        for x in (c_auth - 2 * mm, c_done - 2 * mm, c_note - 2 * mm):
+            sh.vrule(x, yy, gap * 0.72, color=t.hair)
+        for k in range(5):
+            sh.circle_mark(c_note + 3 * mm + k * 4.2 * mm, yy + 2.4 * mm, DOT)
+    sh.finish()
+
+
+def meals(sh, ctx, side=None):
+    """Menus de la semaine, midi et soir, avec la liste de courses."""
+    sh.begin(side)
+    t, L = sh.theme, ctx.L
+    y = sh.banner(L["meals"])
+    sh.text(sh.x0, y - 2 * mm, L["week_of"], font=t.serif_it, size=8, color=t.soft)
+    sh.rule(sh.x0 + 24 * mm, y - 2.6 * mm, 48 * mm)
+    y -= 11 * mm
+
+    names = [L["weekdays"][i] for i in ctx.order]
+    lab_w = 22 * mm
+    colw = (sh.w - lab_w - 4 * mm) / 2
+    row = 13.6 * mm
+    for i, name in enumerate(names):
+        top = y - row * i
+        sh.label(sh.x0, top - 4 * mm, name, size=6, color=t.ink, tracking=1.4)
+        for k, meal in enumerate((L["lunch"], L["dinner"])):
+            x = sh.x0 + lab_w + k * (colw + 4 * mm)
+            sh.text(x, top - 0.6 * mm, meal, font=t.serif_it, size=5.6,
+                    color=t.hair)
+            sh.rule(x, top - 6.6 * mm, colw)
+        sh.rule(sh.x0, top - row + 3 * mm, sh.w, color=t.hair, dash=(0.7, 1.6))
+    y -= row * len(names) + 4 * mm
+
+    sh.label((sh.x0 + sh.x1) / 2, y, L["groceries"], size=6.4, color=t.ink,
+             align="c", tracking=2.2)
+    y -= 7 * mm
+    gcolw = sh.w / 2 - 4 * mm
+    n = max(int((y - sh.y0) / (6.4 * mm)) + 1, 1)
+    for k in range(2):
+        sh.lines(sh.x0 + k * (gcolw + 8 * mm), y, gcolw, n, gap=6.4 * mm,
+                 bullet="square")
+    sh.finish()
+
+
+def contacts(sh, ctx, side=None):
+    """Repertoire : un bloc par contact, nom puis telephone et courriel."""
+    sh.begin(side)
+    t, L = sh.theme, ctx.L
+    y = sh.header(L["contacts"])
+    n = max(int((y - sh.y0) / (21 * mm)), 1)
+    block = (y - sh.y0) / n
+    half = sh.w / 2 - 3 * mm
+    for i in range(n):
+        top = y - block * i
+        sh.label(sh.x0, top - 0.4 * mm, L["c_name"], size=5.4, color=t.hair,
+                 tracking=1.2)
+        sh.rule(sh.x0, top - 5 * mm, sh.w)
+        for k, lab in enumerate((L["c_phone"], L["c_mail"])):
+            x = sh.x0 + k * (half + 6 * mm)
+            sh.label(x, top - 9.4 * mm, lab, size=5.4, color=t.hair, tracking=1.2)
+            sh.rule(x, top - 14 * mm, half)
+        if i < n - 1:
+            sh.rule(sh.x0, top - block + 3 * mm, sh.w, color=t.hair,
+                    dash=(0.7, 1.8))
+    sh.finish()
