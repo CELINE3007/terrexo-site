@@ -33,7 +33,7 @@ class Ctx:
 # --------------------------------------------------------------------------
 # Pages d'ouverture
 # --------------------------------------------------------------------------
-def cover(sh, ctx, side="right"):
+def cover(sh, ctx, side=None):
     sh.begin(side, brand_mark=False)
     t, L = sh.theme, ctx.L
     y = sh.y1 - 42 * mm
@@ -48,13 +48,31 @@ def cover(sh, ctx, side="right"):
     y -= 6 * mm
     sh.text((sh.x0 + sh.x1) / 2, y, L["intro_sign"], font=t.serif_it, size=10,
             align="c")
-    if sh.brand:
-        sh.text((sh.x0 + sh.x1) / 2, sh.y0 + 8 * mm, sh.brand.upper(), font=t.sans,
-                size=5.4, color=t.hair, align="c", tracking=2.4)
+    sh.wordmark((sh.x0 + sh.x1) / 2, sh.y0 + 10 * mm, size=8, color=t.hair)
     sh.finish()
 
 
-def quote(sh, ctx, line1, line2, line3="", side="right"):
+def divider(sh, ctx, number, side=None):
+    """Intercalaire de section : Section N, titre, une phrase de presentation."""
+    sh.ensure("right")
+    sh.begin(side, brand_mark=False)
+    t, L = sh.theme, ctx.L
+    title, blurb = L["sections"][number - 1]
+    y = sh.H * 0.60
+    sh.text((sh.x0 + sh.x1) / 2, y + 13 * mm,
+            "%s %d" % (L["section_word"], number), font=t.serif_it, size=10,
+            color=t.soft, align="c")
+    sh.text((sh.x0 + sh.x1) / 2, y, title, font=t.serif_lt, size=24, align="c",
+            tracking=1.5)
+    sh.rule((sh.x0 + sh.x1) / 2 - 12 * mm, y - 6 * mm, 24 * mm, color=t.rule)
+    inner = sh.w * 0.66
+    sh.paragraph(sh.x0 + (sh.w - inner) / 2, y - 14 * mm, blurb, inner, size=8,
+                 font=t.serif_it, color=t.soft, align="c")
+    sh.wordmark((sh.x0 + sh.x1) / 2, sh.y0 + 8 * mm, size=6.5, color=t.hair)
+    sh.finish()
+
+
+def quote(sh, ctx, line1, line2, line3="", side=None):
     """Page citation, facon separateur."""
     sh.begin(side, brand_mark=False)
     t = sh.theme
@@ -63,12 +81,11 @@ def quote(sh, ctx, line1, line2, line3="", side="right"):
     sh.text(cx, y - 9 * mm, line2, font=t.serif_it, size=15, align="c")
     if line3:
         sh.text(cx, y - 18 * mm, line3.upper(), size=15, align="c", tracking=3)
-    sh.text(cx, sh.y0 + 6 * mm, (sh.brand or "").upper(), font=t.sans, size=5.4,
-            color=t.hair, align="c", tracking=2)
+    sh.wordmark(cx, sh.y0 + 8 * mm, size=6.5, color=t.hair)
     sh.finish()
 
 
-def year_at_glance(sh, ctx, side="right"):
+def year_at_glance(sh, ctx, side=None):
     sh.begin(side)
     L = ctx.L
     y = sh.header(L["yearly_planner"], right=str(ctx.year))
@@ -85,7 +102,7 @@ def year_at_glance(sh, ctx, side="right"):
     sh.finish()
 
 
-def year_overview(sh, ctx, first_month=1, side="right"):
+def year_overview(sh, ctx, first_month=1, side=None):
     """Grille verticale : 6 mois en colonnes, 31 jours en lignes."""
     sh.begin(side)
     t, L = sh.theme, ctx.L
@@ -125,7 +142,7 @@ def year_overview(sh, ctx, first_month=1, side="right"):
     sh.finish()
 
 
-def key_dates(sh, ctx, side="right"):
+def key_dates(sh, ctx, side=None):
     sh.begin(side)
     t, L = sh.theme, ctx.L
     y = sh.header(L["important_dates"], right=str(ctx.year))
@@ -140,7 +157,7 @@ def key_dates(sh, ctx, side="right"):
         step = min(5.9 * mm, (yy - sh.y0) / max(len(items), 1))
         for date, label, is_off in items:
             sh.text(x, yy, "%d %s" % (date.day, L["months_short"][date.month - 1]),
-                    font=t.serif_it, size=6.2, color=t.soft)
+                    font=t.serif_num_it, size=6.2, color=t.soft)
             sh.text(x + 15 * mm, yy, label,
                     font=t.serif_bd if is_off else t.serif, size=6.4)
             yy -= step
@@ -150,7 +167,7 @@ def key_dates(sh, ctx, side="right"):
 # --------------------------------------------------------------------------
 # Objectifs et bilans
 # --------------------------------------------------------------------------
-def yearly_goals(sh, ctx, side="right"):
+def yearly_goals(sh, ctx, side=None):
     sh.begin(side)
     t, L = sh.theme, ctx.L
     y = sh.header(L["yearly_goals"], right=str(ctx.year))
@@ -168,7 +185,7 @@ def yearly_goals(sh, ctx, side="right"):
     sh.finish()
 
 
-def quarterly_goals(sh, ctx, q, side="right"):
+def quarterly_goals(sh, ctx, q, side=None):
     sh.begin(side)
     t, L = sh.theme, ctx.L
     months = "%s - %s" % (L["months"][q * 3 - 3], L["months"][q * 3 - 1])
@@ -185,7 +202,7 @@ def quarterly_goals(sh, ctx, q, side="right"):
     sh.finish()
 
 
-def quarterly_review(sh, ctx, q, side="left"):
+def quarterly_review(sh, ctx, q, side=None):
     sh.begin(side)
     t, L = sh.theme, ctx.L
     y = sh.banner(L["quarterly_review"], sub=L["quarters"][q - 1])
@@ -203,7 +220,7 @@ def quarterly_review(sh, ctx, q, side="left"):
     sh.finish()
 
 
-def bucketlist(sh, ctx, side="right"):
+def bucketlist(sh, ctx, side=None):
     sh.begin(side)
     t, L = sh.theme, ctx.L
     y = sh.header(L["bucketlist"], right=str(ctx.year))
@@ -225,7 +242,8 @@ def bucketlist(sh, ctx, side="right"):
 # --------------------------------------------------------------------------
 # Mensuel
 # --------------------------------------------------------------------------
-def month_cover(sh, ctx, m, side="right"):
+def month_cover(sh, ctx, m, side=None):
+    sh.ensure("right")          # un mois s'ouvre toujours sur une page de droite
     sh.begin(side)
     t, L = sh.theme, ctx.L
     y = sh.y1 - 12 * mm
@@ -276,6 +294,7 @@ def month_spread(sh, ctx, m, split=4):
     names = [L["weekdays"][i] for i in ctx.order]
 
     # --- page de gauche
+    sh.ensure("left")
     sh.begin("left")
     y = sh.y1
     sh.rule(sh.x0, y, sh.w, color=t.ink, lw=t.lw_frame)
@@ -333,7 +352,7 @@ def _month_cells(sh, ctx, weeks, idx_range, x, y, cw, nweeks):
                         size=5.4, color=t.soft)
 
 
-def recurring_tasks(sh, ctx, side="right"):
+def recurring_tasks(sh, ctx, side=None):
     """Tableau des taches / factures recurrentes, coche mois par mois."""
     sh.begin(side)
     t, L = sh.theme, ctx.L
@@ -357,7 +376,7 @@ def recurring_tasks(sh, ctx, side="right"):
     sh.finish()
 
 
-def month_review(sh, ctx, m, side="left"):
+def month_review(sh, ctx, m, side=None):
     sh.begin(side)
     t, L = sh.theme, ctx.L
     y = sh.banner(L["monthly_review"], sub=ctx.monthname(m))
@@ -397,6 +416,7 @@ def week_spread(sh, ctx, monday, layout="horizontal", split=4):
     span = _week_label(ctx, days)
 
     # --- gauche : 4 premiers jours
+    sh.ensure("left")
     sh.begin("left")
     y = sh.y1
     sh.text(sh.x0, y - 6 * mm, str(days[3].year), size=9.5, tracking=2.5)
@@ -453,7 +473,7 @@ def _day_blocks(sh, ctx, days, y, block_h, layout):
         name = ctx.dayname(day).upper()
         sh.label(sh.x0, top - 5 * mm, name, size=6.4, color=t.ink, tracking=1.8)
         nw = sh.c.stringWidth(name, t.sans, 6.4) + 1.8 * len(name)
-        sh.text(sh.x0 + nw + 5 * mm, top - 5 * mm, str(day.day), font=t.serif_it,
+        sh.text(sh.x0 + nw + 5 * mm, top - 5 * mm, str(day.day), font=t.serif_num_it,
                 size=7.4, color=t.soft)
         sh.rule(sh.x0, top - 6.8 * mm, sh.w, color=t.rule)
         if layout == "vertical":
@@ -468,7 +488,7 @@ def _day_blocks(sh, ctx, days, y, block_h, layout):
 # --------------------------------------------------------------------------
 # Pages complementaires
 # --------------------------------------------------------------------------
-def master_list(sh, ctx, side="right"):
+def master_list(sh, ctx, side=None):
     sh.begin(side)
     L = ctx.L
     y = sh.header(L["master_list"])
@@ -480,7 +500,7 @@ def master_list(sh, ctx, side="right"):
     sh.finish()
 
 
-def notes(sh, ctx, side="right", dotted=False):
+def notes(sh, ctx, side=None, dotted=False):
     sh.begin(side)
     t, L = sh.theme, ctx.L
     y = sh.banner(L["notes"])
@@ -494,7 +514,7 @@ def notes(sh, ctx, side="right", dotted=False):
     sh.finish()
 
 
-def gifts(sh, ctx, months, side="right"):
+def gifts(sh, ctx, months, side=None):
     sh.begin(side)
     t, L = sh.theme, ctx.L
     y = sh.banner(L["gifts"])
@@ -521,7 +541,7 @@ def gifts(sh, ctx, months, side="right"):
     sh.finish()
 
 
-def year_in_review(sh, ctx, side="right"):
+def year_in_review(sh, ctx, side=None):
     sh.begin(side)
     t, L = sh.theme, ctx.L
     y = sh.banner(L["year_in_review"], sub=str(ctx.year))
@@ -537,7 +557,7 @@ def year_in_review(sh, ctx, side="right"):
     sh.finish()
 
 
-def life_in_review(sh, ctx, side="right"):
+def life_in_review(sh, ctx, side=None):
     sh.begin(side)
     t, L = sh.theme, ctx.L
     y = sh.banner(L["life_in_review"])
@@ -566,7 +586,7 @@ def life_in_review(sh, ctx, side="right"):
     sh.finish()
 
 
-def next_year_dates(sh, ctx, months, side="right"):
+def next_year_dates(sh, ctx, months, side=None):
     """Colonnes de jours pour les rendez-vous deja pris l'annee suivante."""
     sh.begin(side)
     t, L = sh.theme, ctx.L
@@ -598,6 +618,7 @@ def week_spread_vertical(sh, ctx, monday, split=4):
     t, L = sh.theme, ctx.L
     span = _week_label(ctx, days)
 
+    sh.ensure("left")
     sh.begin("left")
     y = sh.y1
     sh.text(sh.x0, y - 6 * mm, str(ctx.year), size=9.5, tracking=2.5)
@@ -642,8 +663,8 @@ def _week_columns(sh, ctx, days, x, y, cw):
         cx = x + cw * i
         sh.label(cx + 2 * mm, y - 5 * mm, ctx.dayname(day)[:3], size=6, color=t.ink,
                  tracking=1.4)
-        sh.text(cx + cw - 2 * mm, y - 5 * mm, str(day.day), font=t.serif_it, size=7,
-                color=t.soft, align="r")
+        sh.text(cx + cw - 2 * mm, y - 5 * mm, str(day.day), font=t.serif_num_it,
+                size=7, color=t.soft, align="r")
         sh.rule(cx + 1.5 * mm, y - 7.5 * mm, cw - 3 * mm, color=t.rule)
         if i:
             sh.vrule(cx, sh.y0, h, color=t.hair)
@@ -652,7 +673,7 @@ def _week_columns(sh, ctx, days, x, y, cw):
                  color=t.hair, dash=(0.7, 1.5))
 
 
-def printing_guide(sh, ctx, side="right"):
+def printing_guide(sh, ctx, side=None):
     """Fiche d'impression a joindre au fichier vendu."""
     sh.begin(side)
     t, L = sh.theme, ctx.L
@@ -665,4 +686,73 @@ def printing_guide(sh, ctx, side="right"):
     sh.rule(sh.x0, y - 2 * mm, sh.w, color=t.hair)
     sh.paragraph(sh.x0, y - 8 * mm, L["print_footer"], sh.w, size=6.8,
                  font=t.serif_it, color=t.soft)
+    sh.finish()
+
+
+def brand_specimen(sh, ctx, brand="My Line Planner"):
+    """Fiche de marque : logotype, polices, couleurs, regles d'usage."""
+    t, L = sh.theme, ctx.L
+    sh.begin("right", brand_mark=False)
+    x0, x1, w = sh.x0, sh.x1, sh.w
+    y = sh.y1 - 6 * mm
+
+    sh.label(x0, y, "Charte typographique", size=7, tracking=2.4)
+    y -= 16 * mm
+    sh.wordmark(x0 + w / 2, y, size=20, color=t.ink)
+    y -= 9 * mm
+    sh.text(x0 + w / 2, y, L["cover_sub"].format(year=ctx.year), font=t.serif_it,
+            size=9, color=t.soft, align="c")
+    y -= 10 * mm
+    sh.rule(x0, y, w, color=t.ink, lw=t.lw_frame)
+    y -= 12 * mm
+
+    blocks = [
+        ("Logotype",
+         "Cormorant Garamond Light, en capitales, interlettrage 0,34 em. "
+         "Jamais en gras, jamais incliné. Taille minimale conseillée : 6 pt.",
+         [(brand.upper(), t.serif_lt, 13, 4.4)]),
+        ("Titres",
+         "Cormorant Garamond Regular pour les titres de page, Italic pour les "
+         "sous-titres et les questions.",
+         [("Bilan du mois", t.serif, 17, 1.6),
+          ("Mon intention pour ce mois", t.serif_it, 11, 0)]),
+        ("Intitulés",
+         "Jost Regular en capitales espacées (1,4 à 2,6) pour les petites "
+         "rubriques : LES TROIS PRIORITÉS, NOTES, HABITUDES.",
+         [("LES TROIS PRIORITÉS", t.sans, 8, 2.4)]),
+        ("Chiffres",
+         "Chiffres elzéviriens dans les textes, chiffres alignés (variante "
+         "Lining) dans les calendriers et les quantièmes.",
+         [("2027  12 24 31   elzévirien", t.serif, 12, 1.2),
+          ("2027  12 24 31   aligné", t.serif_num, 12, 1.2)]),
+    ]
+    for title, note, samples in blocks:
+        sh.label(x0, y, title, size=6.6, color=t.ink, tracking=1.8)
+        sh.paragraph(x0, y - 5.5 * mm, note, w * 0.52, size=7.6, font=t.serif_it,
+                     color=t.soft)
+        yy = y - 1 * mm
+        for s, font, size, tr in samples:
+            sh.text(x0 + w * 0.58, yy, s, font=font, size=size, tracking=tr)
+            yy -= size * 0.55 + 4 * mm
+        y -= max(22 * mm, len(samples) * 11 * mm + 8 * mm)
+
+    sh.label(x0, y, "Couleurs", size=6.6, color=t.ink, tracking=1.8)
+    y -= 9 * mm
+    swatches = [("Encre", "#1A1A1A", t.ink), ("Texte doux", "#5C5C5C", t.soft),
+                ("Filets", "#9E9E9E", t.rule), ("Traits fins", "#CFCFCF", t.hair),
+                ("Aplat", "#F2F2F2", t.wash)]
+    sw = w / len(swatches)
+    for i, (name, hexa, col) in enumerate(swatches):
+        x = x0 + i * sw
+        sh.box(x, y - 14 * mm, sw - 4 * mm, 14 * mm, color=t.hair, fill=col)
+        sh.text(x, y - 19 * mm, name, font=t.sans, size=6, color=t.ink)
+        sh.text(x, y - 23 * mm, hexa, font=t.sans, size=5.6, color=t.soft)
+    y -= 32 * mm
+
+    sh.rule(x0, y, w, color=t.hair)
+    sh.paragraph(x0, y - 6 * mm,
+                 "Cormorant Garamond et Jost sont diffusées sous licence SIL Open "
+                 "Font License 1.1 : usage commercial libre, y compris pour un "
+                 "produit vendu. Les fichiers et les licences se trouvent dans le "
+                 "dossier agenda/fonts/.", w, size=7.4, font=t.serif_it, color=t.soft)
     sh.finish()

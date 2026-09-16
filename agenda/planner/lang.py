@@ -81,6 +81,17 @@ FR = {
                    "Vie intérieure", "Loisirs & plaisir", "Lieu de vie", "Croissance personnelle"],
     "countries": ["France", "Belgique"],
     "cover_sub": "Agenda {year}",
+    "section_word": "Section",
+    "sections": [
+        ("Vue d'ensemble", "Trois façons de voir l'année entière : d'un coup d'œil, "
+                           "jour par jour, et les dates à ne pas manquer."),
+        ("Objectifs", "De grandes envies, découpées en objectifs trimestriels, "
+                      "avec un temps de bilan à chaque fin de trimestre."),
+        ("Pages datées", "Chaque mois s'ouvre sur sa page de garde et son calendrier, "
+                         "puis viennent les semaines, et enfin le bilan du mois."),
+        ("Bonus", "Les pages qui font le reste : listes, cadeaux, suivi des tâches "
+                  "récurrentes, bilan de l'année et dates de l'an prochain."),
+    ],
     "print_title": "Impression & montage",
     "print_intro": ("Quelques repères pour obtenir des inserts nets, bien centrés "
                     "et faciles à relier."),
@@ -179,6 +190,17 @@ EN = {
                    "Inner life", "Fun & leisure", "Home", "Personal growth"],
     "countries": ["United Kingdom", "United States"],
     "cover_sub": "{year} Planner",
+    "section_word": "Section",
+    "sections": [
+        ("At a glance", "Three ways to see the whole year: at a glance, day by day, "
+                        "and the dates not to be missed."),
+        ("Goals", "Big intentions, broken down into quarterly goals, with a moment "
+                  "to look back at the end of each quarter."),
+        ("Dated inserts", "Each month opens with its cover page and calendar, then "
+                          "come the weeks, and finally the month in review."),
+        ("Bonus", "The pages that do the rest: lists, gifts, recurring task tracking, "
+                  "the year in review and next year's dates."),
+    ],
     "print_title": "Printing & assembly",
     "print_intro": ("A few pointers for crisp, well-centred inserts that are easy "
                     "to bind."),

@@ -30,14 +30,36 @@ REGIONS_BY_LANG = {"fr": ("FR", "BE"), "en": ("UK", "US")}
 
 
 # --------------------------------------------------------------------------
-# Sections
+# Sections, dans l'ordre du produit fini
 # --------------------------------------------------------------------------
 def sec_impression(sh, ctx, o):
+    """Fiche d'impression : elle accompagne la vente, elle n'est pas reliee."""
     P.printing_guide(sh, ctx)
 
 
-def sec_couverture(sh, ctx, o):
+def sec_ouverture(sh, ctx, o):
     P.cover(sh, ctx)
+
+
+def sec_vue_ensemble(sh, ctx, o):
+    P.divider(sh, ctx, 1)
+    P.year_at_glance(sh, ctx)
+    if o.preset != "semainier":
+        P.year_overview(sh, ctx, 1)
+        P.year_overview(sh, ctx, 7)
+    P.key_dates(sh, ctx)
+
+
+def sec_objectifs(sh, ctx, o):
+    P.divider(sh, ctx, 2)
+    P.bucketlist(sh, ctx)
+    P.yearly_goals(sh, ctx)
+    if o.preset == "complet":
+        P.life_in_review(sh, ctx)
+    for q in (1, 2, 3, 4):
+        P.quarterly_goals(sh, ctx, q)
+        if o.preset == "complet":
+            P.quarterly_review(sh, ctx, q)
     if o.quotes:
         L = ctx.L
         if L["code"] == "fr":
@@ -46,61 +68,61 @@ def sec_couverture(sh, ctx, o):
             P.quote(sh, ctx, "A year is built", "one line", "at a time")
 
 
-def sec_annuel(sh, ctx, o):
-    P.year_at_glance(sh, ctx)
-    P.year_overview(sh, ctx, 1, side="left")
-    P.year_overview(sh, ctx, 7, side="right")
-    P.key_dates(sh, ctx)
-    P.yearly_goals(sh, ctx)
-    P.bucketlist(sh, ctx)
-
-
-def sec_trimestriel(sh, ctx, o):
-    for q in (1, 2, 3, 4):
-        P.quarterly_goals(sh, ctx, q, side="right")
-        P.quarterly_review(sh, ctx, q, side="left")
-
-
-def sec_mensuel(sh, ctx, o):
-    for m in o.months:
-        P.month_cover(sh, ctx, m, side="right")
-        P.month_spread(sh, ctx, m, split=o.split)
-        P.month_review(sh, ctx, m, side="left")
-
-
-def sec_hebdo(sh, ctx, o):
-    weeks = cal.year_weeks(ctx.year, ctx.week_start)
-    for monday in weeks:
-        if o.layout == "vertical":
-            P.week_spread_vertical(sh, ctx, monday, split=o.split)
+def weeks_by_month(ctx):
+    """Chaque semaine est rangee dans le mois ou elle commence."""
+    buckets = {m: [] for m in range(1, 13)}
+    for monday in cal.year_weeks(ctx.year, ctx.week_start):
+        if monday.year < ctx.year:
+            m = 1                       # la semaine a cheval sur l'an passe
+        elif monday.year > ctx.year:
+            m = 12
         else:
-            P.week_spread(sh, ctx, monday, layout=o.layout, split=o.split)
+            m = monday.month
+        buckets[m].append(monday)
+    return buckets
 
 
-def sec_extras(sh, ctx, o):
+def sec_pages_datees(sh, ctx, o):
+    P.divider(sh, ctx, 3)
+    buckets = weeks_by_month(ctx)
+    for m in o.months:
+        P.month_cover(sh, ctx, m)
+        P.month_spread(sh, ctx, m, split=o.split)
+        for monday in buckets[m]:
+            if o.layout == "vertical":
+                P.week_spread_vertical(sh, ctx, monday, split=o.split)
+            else:
+                P.week_spread(sh, ctx, monday, layout=o.layout, split=o.split)
+        if o.preset != "semainier":
+            P.month_review(sh, ctx, m)
+
+
+def sec_bonus(sh, ctx, o):
+    P.divider(sh, ctx, 4)
     P.recurring_tasks(sh, ctx)
     P.master_list(sh, ctx)
-    for q in range(4):
-        P.gifts(sh, ctx, [q * 3 + 1, q * 3 + 2, q * 3 + 3],
-                side="right" if q % 2 == 0 else "left")
+    if o.preset == "complet":
+        for q in range(4):
+            P.gifts(sh, ctx, [q * 3 + 1, q * 3 + 2, q * 3 + 3])
     P.year_in_review(sh, ctx)
-    P.life_in_review(sh, ctx)
-    for start in (1, 5, 9):
-        P.next_year_dates(sh, ctx, [start, start + 1, start + 2, start + 3],
-                          side="right" if start != 5 else "left")
+    if o.preset == "complet":
+        for start in (1, 5, 9):
+            P.next_year_dates(sh, ctx, [start, start + 1, start + 2, start + 3])
     for i in range(o.notes):
-        P.notes(sh, ctx, side="right" if i % 2 == 0 else "left",
-                dotted=(i % 2 == 1))
+        P.notes(sh, ctx, dotted=(i % 2 == 1))
 
+
+PRESET_SECTIONS = {
+    "semainier": ["impression", "ouverture", "vue-ensemble", "pages-datees"],
+}
 
 SECTIONS = [
     ("impression", sec_impression),
-    ("couverture", sec_couverture),
-    ("annuel", sec_annuel),
-    ("trimestriel", sec_trimestriel),
-    ("mensuel", sec_mensuel),
-    ("hebdo", sec_hebdo),
-    ("extras", sec_extras),
+    ("ouverture", sec_ouverture),
+    ("vue-ensemble", sec_vue_ensemble),
+    ("objectifs", sec_objectifs),
+    ("pages-datees", sec_pages_datees),
+    ("bonus", sec_bonus),
 ]
 SECTION_NAMES = [n for n, _ in SECTIONS]
 
@@ -143,11 +165,23 @@ def build(path, builders, ctx, o, title):
     return n
 
 
+def build_charte(o, ctx):
+    """Fiche de marque, en A4, hors agenda."""
+    path = os.path.join(o.out, "CHARTE-MARQUE_%s.pdf" % o.brand.title().replace(" ", "-"))
+    sh = Sheet(path, size="a4", theme=make_theme(o), brand=o.brand,
+               title="Charte %s" % o.brand.title())
+    P.brand_specimen(sh, ctx, brand=o.brand)
+    n = sh.save()
+    print("  %-52s %3d page" % (os.path.basename(path), n))
+    return n
+
+
 def run(o):
     langs = ["fr", "en"] if o.lang == "both" else [o.lang]
     starts = ["mon", "sun"] if o.week_start == "both" else [o.week_start]
     layouts = ["horizontal", "vertical"] if o.layout == "both" else [o.layout]
     wanted = SECTION_NAMES if "tout" in o.sections else o.sections
+    wanted = [n for n in wanted if n in PRESET_SECTIONS.get(o.preset, SECTION_NAMES)]
     total = 0
 
     for lang in langs:
@@ -160,22 +194,33 @@ def run(o):
                     else {"mon": "monday", "sun": "sunday"}[ws]
                 base = os.path.join(o.out, str(o.year), lang.upper())
                 os.makedirs(base, exist_ok=True)
-                tag = "%s_%s_%s_%s" % (o.size.upper(), o.year, lang.upper(), ws_label)
-                print("\n> %s  (%s, %s)" % (tag, layout, L["code"]))
+                tag = "%s_%s_%s_%s_%s" % (o.size.upper(), o.year, lang.upper(),
+                                          ws_label, layout)
+                print("\n> %s (%s)" % (tag, o.preset))
 
                 parts = [(n, f) for n, f in SECTIONS if n in wanted]
                 if o.separate:
                     for name, fn in parts:
                         i = SECTION_NAMES.index(name)
-                        suffix = "-" + layout if name == "hebdo" else ""
-                        fname = "%02d_%s_%s%s.pdf" % (i + 1, name, tag, suffix)
+                        fname = "%d_%s_%s.pdf" % (i, name, tag)
                         total += build(os.path.join(base, fname), [fn], ctx, o,
                                        "%s %s" % (name, o.year))
                 if o.combined:
-                    fname = "AGENDA-COMPLET_%s_%s.pdf" % (tag, layout)
-                    total += build(os.path.join(base, fname),
-                                   [f for _, f in parts], ctx, o,
-                                   "%s %s" % (L["cover_sub"].format(year=o.year), lang))
+                    fiche = [f for n, f in parts if n == "impression"]
+                    corps = [f for n, f in parts if n != "impression"]
+                    if fiche and not o.separate:
+                        total += build(os.path.join(base, "FICHE-IMPRESSION_%s.pdf" % tag),
+                                       fiche, ctx, o, "Impression")
+                    if corps:
+                        fname = "AGENDA-COMPLET_%s.pdf" % tag
+                        total += build(os.path.join(base, fname), corps, ctx, o,
+                                       "%s %s" % (L["cover_sub"].format(year=o.year),
+                                                  lang))
+    if o.charte and o.brand:
+        print("\n> Marque")
+        ctx = P.Ctx(o.year, LANGS[langs[0]], week_start=starts[0],
+                    regions=REGIONS_BY_LANG[langs[0]])
+        total += build_charte(o, ctx)
     print("\n%d pages generees dans %s/" % (total, o.out))
 
 
@@ -206,6 +251,14 @@ def main(argv=None):
     p.add_argument("--sections", default="tout",
                    help="liste separee par des virgules : " + ", ".join(SECTION_NAMES))
     p.add_argument("--months", default="all", help="ex. 1,2,3 ou 1-6")
+    p.add_argument("--preset", choices=["complet", "essentiel", "semainier"],
+                   default="complet",
+                   help="complet = toutes les pages ; essentiel = sans les bilans "
+                        "trimestriels, cadeaux et dates n+1 ; semainier = mois et "
+                        "semaines seulement")
+    p.add_argument("--pack", action="store_true",
+                   help="genere toutes les variantes (FR/EN, lundi/dimanche, "
+                        "horizontal/vertical) et les PDF par section")
     p.add_argument("--notes", type=int, default=6, help="nombre de pages de notes")
     p.add_argument("--split", type=int, default=4,
                    help="jours sur la page de gauche (4 = lun-jeu)")
@@ -221,13 +274,19 @@ def main(argv=None):
     p.add_argument("--guides", action="store_true",
                    help="reperes de perforation 6 anneaux")
     p.add_argument("--no-quotes", action="store_false", dest="quotes")
+    p.add_argument("--no-charte", action="store_false", dest="charte",
+                   help="ne pas generer la fiche de charte typographique")
     p.add_argument("--no-combined", action="store_false", dest="combined",
                    help="ne pas generer le PDF complet")
-    p.add_argument("--no-separate", action="store_false", dest="separate",
-                   help="ne pas generer un PDF par section")
+    p.add_argument("--separate", action="store_true",
+                   help="generer aussi un PDF par section")
     p.add_argument("--out", default=os.path.join(os.path.dirname(
         os.path.abspath(__file__)), "export"))
     o = p.parse_args(argv)
+    if o.pack:
+        o.lang, o.week_start, o.layout, o.separate = "both", "both", "both", True
+    if o.preset in ("essentiel", "semainier"):
+        o.notes = min(o.notes, 2)
     o.sections = [s.strip() for s in o.sections.split(",")]
     o.months = parse_months(o.months)
     bad = [s for s in o.sections if s not in SECTION_NAMES + ["tout"]]

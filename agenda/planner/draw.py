@@ -25,10 +25,25 @@ class Sheet:
         self.pages = 0
 
     # -- cycle de vie ------------------------------------------------------
-    def begin(self, side="right", brand_mark=True):
-        """brand_mark=False : page sans la marque verticale (couverture, citation)."""
+    @property
+    def next_side(self):
+        """Cote de la prochaine page : les feuillets alternent droite / gauche."""
+        return "right" if self.pages % 2 == 0 else "left"
+
+    def blank(self):
+        """Page volontairement vide, pour garder le rythme des doubles pages."""
+        self.begin(brand_mark=False)
+        self.finish()
+
+    def ensure(self, side):
+        """Garantit que la page suivante tombe du bon cote (sinon page blanche)."""
+        if self.next_side != side:
+            self.blank()
+
+    def begin(self, side=None, brand_mark=True):
+        """side=None : alternance automatique. brand_mark=False : sans la marque."""
         t = self.theme
-        self.side = side
+        self.side = side = side or self.next_side
         self._mark = brand_mark
         if side == "right":
             self.x0, self.x1 = t.margin_ring * mm, self.W - t.margin_out * mm
@@ -66,8 +81,8 @@ class Sheet:
             x, angle = self.W - gutter * 0.42, 90
         c.translate(x, self.H / 2)
         c.rotate(angle)
-        c.setFont(t.sans, 4.2)
-        c.drawCentredString(0, 0, self.brand.upper(), charSpace=1.2)
+        c.setFont(t.serif_lt, 5.0)
+        c.drawCentredString(0, 0, self.brand.upper(), charSpace=1.6)
         c.restoreState()
 
     def _ring_guides(self):
@@ -86,6 +101,8 @@ class Sheet:
     def text(self, x, y, s, font=None, size=9, color=None, align="l", tracking=0):
         t, c = self.theme, self.c
         font = font or t.serif
+        if font in t.serif_fonts:
+            size *= t.serif_scale
         c.saveState()
         c.setFont(font, size)
         c.setFillColor(color or t.ink)
@@ -98,6 +115,20 @@ class Sheet:
             c.drawString(x, y, s, charSpace=tracking)
         c.restoreState()
         return y
+
+    def width(self, s, font=None, size=9, tracking=0):
+        """Largeur rendue d'une chaine (echelle serif et interlettrage compris)."""
+        t = self.theme
+        font = font or t.serif
+        if font in t.serif_fonts:
+            size *= t.serif_scale
+        return self.c.stringWidth(s, font, size) + tracking * max(len(s) - 1, 0)
+
+    def fit_size(self, s, max_w, size, font=None, tracking=0, floor=5.0):
+        """Reduit la taille jusqu'a ce que le texte tienne dans max_w."""
+        while size > floor and self.width(s, font, size, tracking) > max_w:
+            size -= 0.3
+        return size
 
     def label(self, x, y, s, size=6.2, align="l", color=None, tracking=1.4, font=None):
         """Petite capitale espacee, pour les intitules de rubrique."""
@@ -115,7 +146,7 @@ class Sheet:
             words, line = block.split(), ""
             for word in words:
                 trial = (line + " " + word).strip()
-                if c.stringWidth(trial, font, size) <= width:
+                if self.width(trial, font, size) <= width:
                     line = trial
                 else:
                     self._prow(x, y, line, width, font, size, color, align)
@@ -176,6 +207,7 @@ class Sheet:
         t = self.theme
         y = self.y1 if y is None else y
         base = y - size * 0.95
+        size = self.fit_size(title, self.w - 24 * mm, size, font or t.serif, tracking)
         self.text((self.x0 + self.x1) / 2, base, title, font=font or t.serif,
                   size=size, align="c", tracking=tracking)
         if right:
@@ -194,7 +226,8 @@ class Sheet:
         self.rule(self.x0, top, self.w, color=t.ink, lw=t.lw_frame)
         self.rule(self.x0, top - h, self.w, color=t.ink, lw=t.lw_frame)
         cx = (self.x0 + self.x1) / 2 if align == "c" else self.x0 + self.w / 2
-        self.text(cx, top - h * 0.62, title.upper(), size=11, align="c", tracking=2.6)
+        size = self.fit_size(title.upper(), self.w - 10 * mm, 12, t.serif, 2.6)
+        self.text(cx, top - h * 0.62, title.upper(), size=size, align="c", tracking=2.6)
         if sub:
             self.text(cx, top - h - 4.6 * mm, sub, font=t.serif_it, size=7.6,
                       color=t.soft, align="c")
@@ -232,6 +265,17 @@ class Sheet:
         c.setLineWidth(lw or t.lw_hair)
         c.circle(cx, cy, r, stroke=1, fill=0)
         c.restoreState()
+
+    def wordmark(self, x, y, size=9, color=None, align="c"):
+        """Le logotype de la marque : capitales fines, tres espacees."""
+        if not self.brand:
+            return y
+        t = self.theme
+        tr = size * 0.34
+        if align == "c":
+            x += tr / 2.0
+        return self.text(x, y, self.brand.upper(), font=t.serif_lt, size=size,
+                         color=color or t.soft, align=align, tracking=tr)
 
     def fits(self, y, need):
         return y - need >= self.y0
@@ -280,5 +324,6 @@ class Sheet:
                     self.c.setFillColor(t.wash)
                     self.c.circle(cx, cy + day_size * 0.35, day_size * 0.95, stroke=0, fill=1)
                     self.c.restoreState()
-                self.text(cx, cy, str(day.day), size=day_size + 0.6, align="c")
+                self.text(cx, cy, str(day.day), font=t.serif_num,
+                          size=day_size + 0.6, align="c")
         return (y - (top - rh * len(weeks))) + 1 * mm
