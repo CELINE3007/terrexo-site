@@ -135,12 +135,39 @@ en vente. Pour une version « digitale » vendue à part, générez en `--size a
 4. Les textes livrés ici sont originaux. Si vous les réécrivez, gardez-les
    originaux : c'est la partie réellement protégeable d'un agenda.
 
+## 10. Inserts à plastifier (dashboards)
+
+`inserts.py` met vos dessins en page au format A5, avec **3 mm de fond perdu et
+des traits de coupe** — c'est ce qui évite le liseré blanc après plastification.
+
+```bash
+python3 inserts.py                                   # la série de démonstration
+python3 inserts.py --art mon-dessin.png --layout arche --palette automne \
+    --title "Automne" --sub "SAISON DOUCE" --name automne-01
+```
+
+| `--layout` | Ce que ça donne |
+|---|---|
+| `arche` | le dessin découpé en arche sur fond uni, titre calligraphié dessous |
+| `cadre` | le dessin entier dans un cadre fin, façon tirage encadré (rien n'est coupé) |
+| `pleine` | le dessin à fond perdu, bandeau titre en bas |
+| `citation` | sans dessin : une phrase, pour les intercalaires et les séries saisonnières |
+
+Trois palettes (`--palette girly / automne / creme`), et deux écritures :
+**Italianno** pour les titres calligraphiés, **Caveat** pour les mentions
+manuscrites — les deux sous licence OFL, dans `fonts/`.
+
+Pour préparer un dessin : scannez ou exportez à **300 dpi minimum**, au ratio A5
+(1 748 × 2 480 px), et gardez 1 cm de respiration autour du motif pour que rien
+d'important ne soit rogné.
+
 ## 9. Structure du dossier
 
 ```
 agenda/
 ├── build.command          double-clic sur Mac : installe, génère, ouvre export/
 ├── generate.py            ligne de commande, sections et assemblage
+├── inserts.py             inserts A5 a plastifier (dashboards)
 ├── requirements.txt
 ├── fonts/                 Cormorant Garamond + Jost (OFL) et leurs licences
 ├── export/                les PDF produits (non versionnés)
